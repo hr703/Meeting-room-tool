@@ -304,6 +304,49 @@ tr:hover td{background:#fafbfc}
   </div>
 </div>
 
+<!-- MODIFY MODAL -->
+<div id="modifyModal" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:9998">
+  <div class="reject-box" style="width:460px">
+    <h3 style="color:#0f4c75;margin-bottom:16px;font-size:18px">&#9998; Modify Booking</h3>
+    <input type="hidden" id="modifyBookingId"/>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+      <div>
+        <div style="font-size:11px;font-weight:700;color:#64748b;margin-bottom:4px">ROOM</div>
+        <select id="modifyRoom" style="width:100%;padding:9px;border:1.5px solid #93c5fd;border-radius:8px;font-size:13px;outline:none"></select>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:700;color:#64748b;margin-bottom:4px">DATE</div>
+        <input type="date" id="modifyDate" style="width:100%;padding:9px;border:1.5px solid #93c5fd;border-radius:8px;font-size:13px;outline:none"/>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:700;color:#64748b;margin-bottom:4px">START TIME</div>
+        <input type="time" id="modifyStart" style="width:100%;padding:9px;border:1.5px solid #93c5fd;border-radius:8px;font-size:13px;outline:none"/>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:700;color:#64748b;margin-bottom:4px">END TIME</div>
+        <input type="time" id="modifyEnd" style="width:100%;padding:9px;border:1.5px solid #93c5fd;border-radius:8px;font-size:13px;outline:none"/>
+      </div>
+    </div>
+    <div style="font-size:11px;font-weight:700;color:#64748b;margin-bottom:4px">STATUS</div>
+    <select id="modifyStatus" style="width:100%;padding:9px;border:1.5px solid #93c5fd;border-radius:8px;font-size:13px;outline:none;margin-bottom:12px">
+      <option value="Confirmed">Confirmed (Approved)</option>
+      <option value="Rejected">Rejected</option>
+      <option value="Cancelled">Cancelled</option>
+    </select>
+    <div style="font-size:11px;font-weight:700;color:#64748b;margin-bottom:4px">NOTE / REASON (optional)</div>
+    <textarea id="modifyReason" rows="2" placeholder="Add a note for the employee..."
+      style="width:100%;padding:10px;border:1.5px solid #93c5fd;border-radius:8px;font-size:13px;outline:none;resize:none;margin-bottom:12px"></textarea>
+    <div style="font-size:11px;font-weight:700;color:#64748b;margin-bottom:4px">EMPLOYEE EMAIL</div>
+    <input type="email" id="modifyEmail" placeholder="employee@cuemath.com"
+      style="width:100%;padding:10px;border:1.5px solid #00b4d8;border-radius:8px;font-size:13px;outline:none;margin-bottom:16px;font-weight:600;color:#0f4c75"/>
+    <button onclick="confirmModify()"
+      style="width:100%;display:block;background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;padding:14px;border-radius:10px;font-weight:800;font-size:15px;text-align:center;border:none;cursor:pointer;margin-bottom:10px">
+      &#9998; Save Changes &amp; Notify Employee
+    </button>
+    <button onclick="closeModifyModal()" style="width:100%;background:none;border:1.5px solid #dde3ea;border-radius:8px;padding:10px;color:#64748b;font-size:13px;cursor:pointer">Cancel</button>
+  </div>
+</div>
+
 <!-- TABS -->
 <div class="tabs">
   <button class="tab-btn active" onclick="switchTab('dashboard',this)">&#127968; Dashboard</button>
@@ -1049,8 +1092,9 @@ function renderApprovals(){
       <td>${statusBadge[b.status]||b.status}</td>
       <td style="font-size:11px;color:#e63946">${b.rejectReason||'—'}</td>
       <td style="font-size:11px;color:var(--muted)">${b.actionedAt?new Date(b.actionedAt).toLocaleString('en-IN'):'-'}</td>
+      <td><button class="btn btn-gray btn-sm" onclick="openModifyModal('${b.id}')">&#9998; Modify</button></td>
     </tr>`;
-  }).join('') : '<tr><td colspan="8" class="empty-msg">No history yet.</td></tr>';
+  }).join('') : '<tr><td colspan="9" class="empty-msg">No history yet.</td></tr>';
 }
 
 function approveBooking(id){
@@ -1067,6 +1111,52 @@ function approveBooking(id){
 }
 
 function closeApproveModal(){ document.getElementById('approveModal').style.display = 'none'; }
+
+function openModifyModal(id){
+  const b = bookings.find(x=>x.id===id); if(!b) return;
+  document.getElementById('modifyBookingId').value = id;
+  document.getElementById('modifyEmail').value  = b.email || '';
+  document.getElementById('modifyDate').value   = b.date || '';
+  document.getElementById('modifyStart').value  = b.start || '';
+  document.getElementById('modifyEnd').value    = b.end || '';
+  document.getElementById('modifyStatus').value = b.status || 'Confirmed';
+  document.getElementById('modifyReason').value = b.rejectReason || '';
+  const sel = document.getElementById('modifyRoom');
+  sel.innerHTML = rooms.map(r=>`<option value="${r.id}" ${r.id===b.roomId?'selected':''}>${r.name}</option>`).join('');
+  document.getElementById('modifyModal').style.display = 'flex';
+}
+function closeModifyModal(){ document.getElementById('modifyModal').style.display = 'none'; }
+
+function confirmModify(){
+  const id     = document.getElementById('modifyBookingId').value;
+  const email  = document.getElementById('modifyEmail').value.trim();
+  const date   = document.getElementById('modifyDate').value;
+  const start  = document.getElementById('modifyStart').value;
+  const end    = document.getElementById('modifyEnd').value;
+  const roomId = document.getElementById('modifyRoom').value;
+  const status = document.getElementById('modifyStatus').value;
+  const reason = document.getElementById('modifyReason').value.trim();
+  if(!date||!start||!end||!roomId){ toast('Please fill all fields','#e63946'); return; }
+  const b = bookings.find(x=>x.id===id); if(!b) return;
+  b.roomId       = roomId;
+  b.date         = date;
+  b.start        = start;
+  b.end          = end;
+  b.email        = email;
+  b.status       = status;
+  b.rejectReason = reason || '';
+  b.actionedAt   = new Date().toISOString();
+  save(); updatePendingBadge(); renderApprovals(); renderDashboard(); renderBookingsTable();
+  const room = rooms.find(r=>r.id===roomId);
+  // Send notification email to employee
+  if(email){
+    const subject = `📝 Meeting Room Booking Updated – ${room?.name}`;
+    const body    = `Hi ${b.organizer},\n\nYour meeting room booking has been modified by admin.\n\nRoom    : ${room?.name}\nDate    : ${date}\nTime    : ${fmtTime(start)} – ${fmtTime(end)}\nStatus  : ${status}\n${reason?'Note    : '+reason+'\n':''}\nFor queries contact hr@cuemath.com\n\nRegards,\nAdmin Team`;
+    sendEmailViaServer(email, subject, body).catch(()=>{});
+  }
+  toast('✅ Booking modified successfully!','#0f4c75');
+  closeModifyModal();
+}
 
 function confirmApproveAndSend(){
   try {
