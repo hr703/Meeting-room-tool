@@ -330,13 +330,16 @@ tr:hover td{background:#fafbfc}
 
   <!-- Timeline -->
   <div class="timeline-wrap">
-    <div class="timeline-title">&#128336; Today's Timeline (8 AM – 8 PM)</div>
+    <div class="timeline-title" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+      <span>&#128336; Room Availability Timeline (8 AM – 8 PM)</span>
+      <input type="date" id="timelineDate" onchange="renderTimeline();renderTodayTable()" style="padding:6px 12px;border:1.5px solid #00b4d8;border-radius:8px;font-size:13px;font-weight:600;color:#0f4c75;outline:none;cursor:pointer"/>
+    </div>
     <div class="timeline-grid" id="timelineGrid"></div>
   </div>
 
   <!-- Today's Bookings -->
   <div class="panel">
-    <div class="panel-hdr">&#128203; Today's Bookings</div>
+    <div class="panel-hdr">&#128203; Bookings</div>
     <div class="panel-body">
       <div class="tbl-wrap">
         <table>
@@ -792,7 +795,9 @@ function renderRoomCards(bookedRoomIds, upcoming){
 }
 
 function renderTimeline(){
-  const d=today();
+  const sel=document.getElementById('timelineDate');
+  if(!sel.value) sel.value=today();
+  const d=sel.value;
   const START_H=8, END_H=20, TOTAL=(END_H-START_H)*60;
   const nt=nowTime();
   const nowMins=toMins(nt);
@@ -835,7 +840,8 @@ function renderTodayTable(todayBookings){
     'Pending':  '<span class="badge b-upcoming">⏳ Pending</span>',
     'Rejected': '<span class="badge b-cancelled">Rejected</span>',
   };
-  const allToday = bookings.filter(b=>b.date===today()).sort((a,b)=>a.start.localeCompare(b.start));
+  const selD = document.getElementById('timelineDate')?.value || today();
+  const allToday = bookings.filter(b=>b.date===selD).sort((a,b)=>a.start.localeCompare(b.start));
   const html = allToday.length ? allToday.map(b=>{
     const st=bookingStatus(b);
     return `<tr style="${st==='Pending'?'background:#fffbeb':''}">
