@@ -67,21 +67,19 @@ else:
 # ─────────────────────────────────────────────────────────────────
 
 def send_email_async(to_email, subject, body):
-    def _send():
-        try:
-            msg = MIMEMultipart()
-            msg['From']    = EMAIL_FROM
-            msg['To']      = to_email
-            msg['Subject'] = subject
-            msg.attach(MIMEText(body, 'plain'))
-            with smtplib.SMTP(EMAIL_HOST, EMAIL_PORT, timeout=15) as s:
-                s.ehlo(); s.starttls()
-                s.login(EMAIL_USER, EMAIL_PASS)
-                s.send_message(msg)
-            print(f'[EMAIL] Sent to {to_email} | {subject}')
-        except Exception as e:
-            print(f'[EMAIL ERROR] {e}')
-    threading.Thread(target=_send, daemon=True).start()
+    try:
+        msg = MIMEMultipart()
+        msg['From']    = EMAIL_FROM
+        msg['To']      = to_email
+        msg['Subject'] = subject
+        msg.attach(MIMEText(body, 'plain'))
+        with smtplib.SMTP(EMAIL_HOST, EMAIL_PORT, timeout=15) as s:
+            s.ehlo(); s.starttls()
+            s.login(EMAIL_USER, EMAIL_PASS)
+            s.send_message(msg)
+        print(f'[EMAIL] Sent to {to_email} | {subject}')
+    except Exception as e:
+        print(f'[EMAIL ERROR] {e}')
 
 
 class Handler(BaseHTTPRequestHandler):
