@@ -168,9 +168,27 @@ tr:hover td{background:#fafbfc}
   header{padding:0 14px}
   .tabs{padding:10px 14px 0}
 }
+#googleLoginScreen{position:fixed;inset:0;background:linear-gradient(135deg,#0f4c75 0%,#00b4d8 100%);display:flex;align-items:center;justify-content:center;z-index:9999}
+.g-login-box{background:#fff;border-radius:20px;padding:40px 44px;width:360px;box-shadow:0 20px 60px rgba(0,0,0,.3);text-align:center}
+.g-login-logo{width:60px;height:60px;background:linear-gradient(135deg,#0f4c75,#00b4d8);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 16px}
+.g-login-box h2{font-size:20px;font-weight:800;color:#0f4c75;margin-bottom:4px}
+.g-login-box p{font-size:12px;color:#64748b;margin-bottom:24px}
+.g-login-err{color:#ef4444;font-size:12px;margin-top:12px;display:none}
 </style>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
+
+<!-- GOOGLE LOGIN SCREEN -->
+<div id="googleLoginScreen">
+  <div class="g-login-box">
+    <div class="g-login-logo">&#128197;</div>
+    <h2>Meeting Room Booking</h2>
+    <p>Sign in with your Cuemath email to continue</p>
+    <div id="googleSignInBtn" style="display:flex;justify-content:center;margin:16px 0"></div>
+    <div class="g-login-err" id="gLoginErr">&#10060; Only @cuemath.com emails are allowed.</div>
+  </div>
+</div>
 
 <!-- HEADER -->
 <header>
@@ -1337,7 +1355,34 @@ setInterval(async()=>{
   } catch(e){}
 }, 5000);
 
-initApp();
+// ── GOOGLE LOGIN ─────────────────────────────────────────────────
+const GOOGLE_CLIENT_ID  = '370807178893-dmhvjqvinojrum1igr0898a7jkcgo2df.apps.googleusercontent.com';
+const ALLOWED_DOMAIN    = 'cuemath.com';
+
+function handleGoogleLogin(response){
+  const payload = JSON.parse(atob(response.credential.split('.')[1]));
+  const email   = (payload.email || '').toLowerCase();
+  const err     = document.getElementById('gLoginErr');
+  if(email.endsWith('@' + ALLOWED_DOMAIN)){
+    document.getElementById('googleLoginScreen').style.display = 'none';
+    err.style.display = 'none';
+    initApp();
+  } else {
+    err.style.display = 'block';
+  }
+}
+
+window.onload = function(){
+  google.accounts.id.initialize({
+    client_id: GOOGLE_CLIENT_ID,
+    callback:  handleGoogleLogin
+  });
+  google.accounts.id.renderButton(
+    document.getElementById('googleSignInBtn'),
+    { theme: 'outline', size: 'large', width: 280 }
+  );
+};
+// ─────────────────────────────────────────────────────────────────
 </script>
 </body>
 </html>
