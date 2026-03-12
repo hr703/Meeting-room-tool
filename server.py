@@ -1,19 +1,14 @@
 #!/usr/bin/env python3
-import json, os, smtplib, threading
+import json, os, urllib.request
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
 
 DATA_FILE    = os.path.join(os.path.dirname(__file__), 'data.json')
 DATABASE_URL = os.environ.get('DATABASE_URL')
 
-# ── EMAIL CONFIG ─────────────────────────────────────────────────
-EMAIL_HOST = 'smtp-relay.brevo.com'
-EMAIL_PORT = 587
-EMAIL_USER = 'hr@cuemath.com'
-EMAIL_PASS = os.environ.get('EMAIL_PASS', '')
-EMAIL_FROM = 'Meeting Room Booking <hr@cuemath.com>'
+# ── EMAIL CONFIG (Brevo HTTP API) ────────────────────────────────
+BREVO_API_KEY = os.environ.get('BREVO_API_KEY', '')
+EMAIL_FROM    = 'hr@cuemath.com'
 # ─────────────────────────────────────────────────────────────────
 
 # ── STORAGE (PostgreSQL on cloud, JSON file locally) ─────────────
@@ -68,15 +63,18 @@ else:
 
 def send_email_async(to_email, subject, body):
     try:
-        msg = MIMEMultipart()
-        msg['From']    = EMAIL_FROM
-        msg['To']      = to_email
-        msg['Subject'] = subject
-        msg.attach(MIMEText(body, 'plain'))
-        with smtplib.SMTP(EMAIL_HOST, EMAIL_PORT, timeout=15) as s:
-            s.ehlo(); s.starttls()
-            s.login(EMAIL_USER, EMAIL_PASS)
-            s.send_message(msg)
+        payload = json.dumps({
+            'sender':      {'name': 'Meeting Room Booking', 'email': EMAIL_FROM},
+            'to':          [{'email': to_email}],
+            'subject':     subject,
+            'textContent': body
+        }).encode()
+        req = urllib.request.Request(
+            'https://api.brevo.com/v3/smtp/email',
+            data=payload,
+            headers={'api-key': BREVO_API_KEY, 'Content-Type': 'application/json'}
+        )
+        urllib.request.urlopen(req, timeout=15)
         print(f'[EMAIL] Sent to {to_email} | {subject}')
         return {'ok': True, 'msg': 'Email sent'}
     except Exception as e:
