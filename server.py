@@ -73,8 +73,8 @@ def send_email_async(to_email, subject, body):
         msg['To']      = to_email
         msg['Subject'] = subject
         msg.attach(MIMEText(body, 'plain'))
-        with smtplib.SMTP(EMAIL_HOST, EMAIL_PORT, timeout=15) as s:
-            s.ehlo(); s.starttls()
+        with smtplib.SMTP_SSL('smtp.gmail.com', 465, timeout=15) as s:
+            s.ehlo()
             s.login(EMAIL_USER, EMAIL_PASS)
             s.send_message(msg)
         print(f'[EMAIL] Sent to {to_email} | {subject}')
