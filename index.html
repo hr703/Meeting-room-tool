@@ -272,13 +272,30 @@ tr:hover td{background:#fafbfc}
 
 <!-- APPROVE MODAL -->
 <div id="approveModal" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:9998">
-  <div class="reject-box" style="width:420px">
+  <div class="reject-box" style="width:460px">
     <h3 style="color:#06d6a0;margin-bottom:16px;font-size:18px">&#10003; Approve Booking</h3>
     <input type="hidden" id="approveBookingId"/>
-    <div id="approveBookingDetails" style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:10px;padding:14px;margin-bottom:16px;font-size:13px;color:#166534;line-height:1.7"></div>
-    <div style="font-size:12px;font-weight:700;color:#64748b;margin-bottom:5px">EMPLOYEE EMAIL *</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+      <div>
+        <div style="font-size:11px;font-weight:700;color:#64748b;margin-bottom:4px">ROOM</div>
+        <select id="approveRoom" style="width:100%;padding:9px;border:1.5px solid #86efac;border-radius:8px;font-size:13px;outline:none"></select>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:700;color:#64748b;margin-bottom:4px">DATE</div>
+        <input type="date" id="approveDate" style="width:100%;padding:9px;border:1.5px solid #86efac;border-radius:8px;font-size:13px;outline:none"/>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:700;color:#64748b;margin-bottom:4px">START TIME</div>
+        <input type="time" id="approveStart" style="width:100%;padding:9px;border:1.5px solid #86efac;border-radius:8px;font-size:13px;outline:none"/>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:700;color:#64748b;margin-bottom:4px">END TIME</div>
+        <input type="time" id="approveEnd" style="width:100%;padding:9px;border:1.5px solid #86efac;border-radius:8px;font-size:13px;outline:none"/>
+      </div>
+    </div>
+    <div style="font-size:11px;font-weight:700;color:#64748b;margin-bottom:4px">EMPLOYEE EMAIL *</div>
     <input type="email" id="approveEmail" placeholder="employee@cuemath.com"
-      style="width:100%;padding:10px;border:1.5px solid #00b4d8;border-radius:8px;font-size:13px;outline:none;margin-bottom:16px;font-weight:600;color:#0f4c75"/>
+      style="width:100%;padding:10px;border:1.5px solid #00b4d8;border-radius:8px;font-size:13px;outline:none;margin-bottom:14px;font-weight:600;color:#0f4c75"/>
     <button onclick="confirmApproveAndSend()"
       style="width:100%;display:block;background:linear-gradient(135deg,#06d6a0,#059669);color:#fff;padding:14px;border-radius:10px;font-weight:800;font-size:15px;text-align:center;border:none;cursor:pointer;margin-bottom:10px">
       &#10003; Approve &amp; Send Email to Employee
@@ -1032,15 +1049,14 @@ function renderApprovals(){
 
 function approveBooking(id){
   const b = bookings.find(x=>x.id===id); if(!b) return;
-  const roomA = rooms.find(r=>r.id===b.roomId);
   document.getElementById('approveBookingId').value = id;
   document.getElementById('approveEmail').value = b.email || '';
-  document.getElementById('approveBookingDetails').innerHTML =
-    `<b>Room:</b> ${roomA?.name||'—'}<br>
-     <b>Date:</b> ${b.date}<br>
-     <b>Time:</b> ${fmtTime(b.start)} – ${fmtTime(b.end)}<br>
-     <b>Purpose:</b> ${b.purpose}<br>
-     <b>Organizer:</b> ${b.organizer}`;
+  document.getElementById('approveDate').value  = b.date || '';
+  document.getElementById('approveStart').value = b.start || '';
+  document.getElementById('approveEnd').value   = b.end || '';
+  // Populate room dropdown
+  const sel = document.getElementById('approveRoom');
+  sel.innerHTML = rooms.map(r=>`<option value="${r.id}" ${r.id===b.roomId?'selected':''}>${r.name}</option>`).join('');
   document.getElementById('approveModal').style.display = 'flex';
 }
 
@@ -1052,6 +1068,11 @@ function confirmApproveAndSend(){
     const email = document.getElementById('approveEmail').value.trim();
     const b = bookings.find(x=>x.id===id);
     if(!b){ toast('Booking not found — please refresh page','#e63946'); closeApproveModal(); return; }
+    // Apply edits
+    b.roomId = document.getElementById('approveRoom').value  || b.roomId;
+    b.date   = document.getElementById('approveDate').value  || b.date;
+    b.start  = document.getElementById('approveStart').value || b.start;
+    b.end    = document.getElementById('approveEnd').value   || b.end;
     const roomA = rooms.find(r=>r.id===b.roomId);
     b.status='Confirmed'; b.actionedAt=new Date().toISOString();
     if(email) b.email=email;
