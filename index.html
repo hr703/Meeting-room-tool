@@ -1252,9 +1252,18 @@ function editBooking(id){
 function cancelBooking(id){
   if(!confirm('Cancel this booking?')) return;
   const b=bookings.find(x=>x.id===id); if(!b) return;
-  b.status='Cancelled';
-  save(); renderDashboard(); renderBookingsTable();
-  toast('Booking cancelled','#e63946');
+  b.status='Cancelled'; b.actionedAt=new Date().toISOString();
+  save(); renderDashboard(); renderBookingsTable(); renderApprovals();
+  const room=rooms.find(r=>r.id===b.roomId);
+  if(b.email){
+    const subject=`❌ Meeting Room Booking Cancelled – ${room?.name}`;
+    const body=`Hi ${b.organizer},\n\nYour meeting room booking has been CANCELLED by admin.\n\nRoom    : ${room?.name}\nDate    : ${b.date}\nTime    : ${fmtTime(b.start)} – ${fmtTime(b.end)}\nPurpose : ${b.purpose}\n\nPlease submit a new request if needed.\n\nRegards,\nAdmin Team`;
+    sendEmailViaServer(b.email, subject, body).then(res=>{
+      toast(res.ok?'❌ Cancelled! Email sent to '+b.email:'❌ Cancelled! (Email error)','#e63946');
+    }).catch(()=>toast('❌ Booking cancelled','#e63946'));
+  } else {
+    toast('Booking cancelled','#e63946');
+  }
 }
 
 function deleteBooking(id){
