@@ -78,8 +78,10 @@ def send_email_async(to_email, subject, body):
             s.login(EMAIL_USER, EMAIL_PASS)
             s.send_message(msg)
         print(f'[EMAIL] Sent to {to_email} | {subject}')
+        return {'ok': True, 'msg': 'Email sent'}
     except Exception as e:
         print(f'[EMAIL ERROR] {e}')
+        return {'ok': False, 'msg': str(e)}
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -129,8 +131,8 @@ class Handler(BaseHTTPRequestHandler):
             subject = req.get('subject','')
             body    = req.get('body','')
             if to and subject and body:
-                send_email_async(to, subject, body)
-                resp = b'{"ok":true,"msg":"Email queued"}'
+                result = send_email_async(to, subject, body)
+                resp = json.dumps(result).encode()
             else:
                 resp = b'{"ok":false,"msg":"Missing fields"}'
             self.send_response(200)
