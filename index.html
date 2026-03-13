@@ -115,8 +115,8 @@ header{background:#000000;color:#F5F5F5;padding:0 28px;display:flex;justify-cont
 .timeline-grid{display:grid;min-width:900px}
 .tl-header{display:flex;margin-bottom:4px}
 .tl-room-label{width:140px;flex-shrink:0;font-size:11px;font-weight:700;color:#8A8A8A;padding-right:8px}
-.tl-hours{flex:1;display:flex}
-.tl-hour{flex:1;font-size:10px;color:#8A8A8A;font-weight:600;text-align:center;border-left:1px dashed #2A2A2A;padding-top:2px}
+.tl-hours{flex:1;position:relative;height:18px}
+.tl-hour{font-size:10px;color:#8A8A8A;font-weight:600;text-align:center;padding-top:2px;white-space:nowrap}
 .tl-row{display:flex;margin-bottom:6px;align-items:center}
 .tl-room-name{width:140px;flex-shrink:0;font-size:12px;font-weight:700;color:#F5F5F5;padding-right:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tl-bar-wrap{flex:1;height:28px;background:#0D0D0D;border-radius:6px;position:relative;border:1px solid #2A2A2A}
@@ -856,11 +856,14 @@ function renderTimeline(){
   const nowPct=Math.min(100,Math.max(0,((nowMins-START_H*60)/TOTAL)*100));
 
   const hours=[];
-  for(let h=START_H;h<=END_H;h++) hours.push(h>12?`${h-12}pm`:h===12?'12pm':`${h}am`);
+  for(let h=START_H;h<END_H;h++) hours.push(h>12?`${h-12}pm`:h===12?'12pm':`${h}am`);
 
   let html=`<div class="tl-header">
     <div class="tl-room-label"></div>
-    <div class="tl-hours">${hours.map(h=>`<div class="tl-hour">${h}</div>`).join('')}</div>
+    <div class="tl-hours" style="position:relative;flex:1">
+      ${hours.map((h,i)=>`<div class="tl-hour" style="position:absolute;left:${(i/12*100).toFixed(2)}%;transform:translateX(-50%)">${h}</div>`).join('')}
+      <div class="tl-hour" style="position:absolute;right:0;transform:translateX(50%)">8pm</div>
+    </div>
   </div>`;
 
   const colors=['#FFBA07','#22c55e','#a855f7','#f77f00','#60a5fa','#ef4444','#E5A600'];
@@ -875,9 +878,10 @@ function renderTimeline(){
       return `<div class="tl-block" style="left:${left}%;width:${width}%;background:${c}" title="${b.purpose} (${fmtTime(b.start)}–${fmtTime(b.end)})">${b.purpose}</div>`;
     }).join('');
     const nowLine=`<div class="tl-now" style="left:${nowPct}%"></div>`;
+    const gridLines=Array.from({length:11},(_,i)=>`<div style="position:absolute;top:0;bottom:0;left:${((i+1)/12*100).toFixed(2)}%;width:1px;background:#2A2A2A;z-index:1"></div>`).join('');
     html+=`<div class="tl-row">
       <div class="tl-room-name" title="${r.name}">${r.name}</div>
-      <div class="tl-bar-wrap">${nowLine}${blocks}</div>
+      <div class="tl-bar-wrap">${gridLines}${nowLine}${blocks}</div>
     </div>`;
   });
   document.getElementById('timelineGrid').innerHTML=html;
