@@ -2,73 +2,43 @@
   "rooms": [
     {
       "id": "RM001",
-      "name": "Board Room",
-      "capacity": 20,
-      "location": "3rd Floor",
-      "facilities": [
-        "Projector",
-        "Whiteboard",
-        "AC",
-        "Video Conf"
-      ],
-      "desc": "Main boardroom for leadership meetings"
+      "name": "Omega Room",
+      "capacity": 5,
+      "location": "2nd Floor",
+      "facilities": [],
+      "desc": ""
     },
     {
       "id": "RM002",
-      "name": "Conference Room A",
-      "capacity": 12,
+      "name": "Sigma Room",
+      "capacity": 5,
       "location": "2nd Floor",
-      "facilities": [
-        "Projector",
-        "AC",
-        "Whiteboard"
-      ],
+      "facilities": [],
       "desc": ""
     },
     {
       "id": "RM003",
-      "name": "Conference Room B",
-      "capacity": 8,
+      "name": "Delta Room",
+      "capacity": 5,
       "location": "2nd Floor",
-      "facilities": [
-        "TV Screen",
-        "AC"
-      ],
+      "facilities": [],
       "desc": ""
     },
     {
       "id": "RM004",
-      "name": "Training Room",
-      "capacity": 30,
-      "location": "1st Floor",
-      "facilities": [
-        "Projector",
-        "Whiteboard",
-        "AC",
-        "PA System"
-      ],
-      "desc": "Large room for training sessions"
+      "name": "Zero Room",
+      "capacity": 12,
+      "location": "2nd Floor",
+      "facilities": [],
+      "desc": ""
     },
     {
       "id": "RM005",
-      "name": "Huddle Space 1",
-      "capacity": 4,
+      "name": "Alpha Room",
+      "capacity": 5,
       "location": "1st Floor",
-      "facilities": [
-        "TV Screen"
-      ],
-      "desc": "Quick sync room"
-    },
-    {
-      "id": "RM006",
-      "name": "Interview Room",
-      "capacity": 4,
-      "location": "HR Floor",
-      "facilities": [
-        "AC",
-        "Whiteboard"
-      ],
-      "desc": "For interviews and 1-on-1s"
+      "facilities": [],
+      "desc": ""
     }
   ],
   "bookings": [],
