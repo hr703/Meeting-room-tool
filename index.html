@@ -1026,7 +1026,7 @@ function saveBooking(){
     const adminSub = `🔔 New Room Booking Request – ${roomN?.name}`;
     const adminMsg = `Hi Admin,\n\nA new meeting room booking request has been submitted.\n\nBooking ID : ${rec.id}\nRoom       : ${roomN?.name}\nDate       : ${date}\nTime       : ${fmtTime(start)} – ${fmtTime(end)}\nPurpose    : ${purpose}\nOrganizer  : ${organizer}\nEmail      : ${email||'-'}\nAttendees  : ${attendees||'-'}\n\nPlease login to approve or reject this request.\n\nRegards,\nMeeting Room System`;
     sendEmailViaServer('hr@cuemath.com', adminSub, adminMsg).catch(()=>{});
-    sendEmailViaServer('ajay.yadav@cuemath.com', adminSub, adminMsg).catch(()=>{});
+    sendEmailViaServer('ravindra.rajput@cuemath.com', adminSub, adminMsg).catch(()=>{});
   }
   save(); clearBookingForm(); renderUpcoming(); renderDashboard(); updatePendingBadge();
 }
