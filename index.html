@@ -166,6 +166,12 @@ tr:hover td{background:#1F1F1F}
 .filter-bar select:focus,.filter-bar input:focus{border-color:#FFBA07}
 .filter-bar select option{background:#191919;color:#F5F5F5}
 
+/* Calendar/time picker icons — invert for dark background */
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:0.7;cursor:pointer}
+input[type="date"]::-webkit-calendar-picker-indicator:hover,
+input[type="time"]::-webkit-calendar-picker-indicator:hover{opacity:1}
+
 @media(max-width:768px){
   .form-row,.form-row-3{grid-template-columns:1fr}
   .tab-content{padding:16px}
