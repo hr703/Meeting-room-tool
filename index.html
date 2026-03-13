@@ -7,160 +7,162 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --primary:#0f4c75;--primary-light:#1b6ca8;--accent:#00b4d8;
-  --green:#06d6a0;--orange:#f77f00;--red:#e63946;--purple:#7209b7;
-  --bg:#f0f4f8;--card:#fff;--border:#dde3ea;--text:#1a202c;--muted:#64748b;
+  --primary:#FFBA07;--primary-light:#E5A600;--accent:#FFBA07;
+  --green:#22c55e;--orange:#f77f00;--red:#ef4444;--purple:#a855f7;
+  --bg:#0D0D0D;--card:#191919;--border:#2A2A2A;--text:#F5F5F5;--muted:#8A8A8A;
 }
-body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
 
 /* ADMIN LOGIN POPUP */
-.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:9999}
+.modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:9999}
 .modal-ov.show{display:flex}
-.login-box{background:#fff;border-radius:20px;padding:36px 40px;width:340px;box-shadow:0 20px 60px rgba(0,0,0,.3);text-align:center}
-.login-logo{width:56px;height:56px;background:linear-gradient(135deg,#0f4c75,#00b4d8);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 14px}
-.login-box h2{font-size:18px;font-weight:800;color:#0f4c75;margin-bottom:4px}
-.login-box p{font-size:12px;color:#64748b;margin-bottom:20px}
-.login-box input{width:100%;padding:10px 14px;border:1.5px solid #dde3ea;border-radius:10px;font-size:14px;outline:none;margin-bottom:10px;transition:border .2s}
-.login-box input:focus{border-color:#00b4d8}
-.login-btn{width:100%;padding:11px;background:linear-gradient(135deg,#0f4c75,#00b4d8);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;transition:opacity .2s}
-.login-btn:hover{opacity:.9}
-.login-err{color:#e63946;font-size:12px;margin-top:8px;display:none}
-.admin-badge{background:#f59e0b;color:#1e293b;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px}
+.login-box{background:#191919;border:1px solid #2A2A2A;border-radius:12px;padding:36px 40px;width:340px;box-shadow:0 20px 60px rgba(0,0,0,.6);text-align:center}
+.login-logo{width:56px;height:56px;background:#FFBA07;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 14px}
+.login-box h2{font-size:18px;font-weight:800;color:#F5F5F5;margin-bottom:4px}
+.login-box p{font-size:12px;color:#8A8A8A;margin-bottom:20px}
+.login-box input{width:100%;padding:10px 14px;border:1.5px solid #2A2A2A;border-radius:8px;font-size:14px;outline:none;margin-bottom:10px;transition:border .2s;background:#0D0D0D;color:#F5F5F5}
+.login-box input:focus{border-color:#FFBA07}
+.login-btn{width:100%;padding:11px;background:#FFBA07;color:#0D0D0D;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;transition:background .2s}
+.login-btn:hover{background:#E5A600}
+.login-err{color:#ef4444;font-size:12px;margin-top:8px;display:none}
+.admin-badge{background:#FFBA07;color:#0D0D0D;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px}
 /* REJECT MODAL */
-#rejectModal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:9998}
+#rejectModal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:9998}
 #rejectModal.show{display:flex}
-.reject-box{background:#fff;border-radius:16px;padding:28px;width:380px;box-shadow:0 12px 40px rgba(0,0,0,.2)}
+.reject-box{background:#191919;border:1px solid #2A2A2A;border-radius:12px;padding:28px;width:380px;box-shadow:0 12px 40px rgba(0,0,0,.5)}
 
 /* HEADER */
-header{background:linear-gradient(135deg,#0f4c75 0%,#1b6ca8 60%,#00b4d8 100%);color:#fff;padding:0 28px;display:flex;justify-content:space-between;align-items:center;height:62px;box-shadow:0 4px 20px rgba(15,76,117,.35);position:sticky;top:0;z-index:100}
+header{background:#000000;color:#F5F5F5;padding:0 28px;display:flex;justify-content:space-between;align-items:center;height:62px;box-shadow:0 1px 0 #2A2A2A;position:sticky;top:0;z-index:100}
 .logo{display:flex;align-items:center;gap:10px}
-.logo-icon{width:36px;height:36px;background:rgba(255,255,255,.15);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px}
-.logo h1{font-size:16px;font-weight:700}
-.logo span{font-size:11px;opacity:.65;display:block}
+.logo-icon{width:36px;height:36px;background:#FFBA07;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.logo h1{font-size:16px;font-weight:700;color:#F5F5F5}
+.logo span{font-size:11px;color:#8A8A8A;display:block}
 .hdr-right{display:flex;gap:8px;align-items:center}
-#liveClock{font-size:13px;font-weight:700;background:rgba(255,255,255,.12);padding:5px 12px;border-radius:8px;letter-spacing:.5px}
+#liveClock{font-size:13px;font-weight:700;background:#1F1F1F;border:1px solid #2A2A2A;padding:5px 12px;border-radius:8px;letter-spacing:.5px;color:#F5F5F5}
 
 /* NOTIFICATION BELL */
 .notif-wrap{position:relative;cursor:pointer}
-.notif-bell{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:8px;padding:6px 12px;font-size:16px;cursor:pointer;display:flex;align-items:center;gap:5px;font-weight:600;transition:background .2s}
-.notif-bell:hover{background:rgba(255,255,255,.25)}
-.notif-dot{position:absolute;top:-4px;right:-4px;background:#e63946;color:#fff;font-size:10px;font-weight:800;border-radius:20px;padding:1px 5px;min-width:18px;text-align:center;display:none}
-.notif-dropdown{position:absolute;top:calc(100% + 8px);right:0;width:340px;background:#fff;border-radius:14px;box-shadow:0 8px 32px rgba(0,0,0,.18);z-index:500;display:none;overflow:hidden}
+.notif-bell{background:#1F1F1F;border:1px solid #2A2A2A;color:#F5F5F5;border-radius:8px;padding:6px 12px;font-size:16px;cursor:pointer;display:flex;align-items:center;gap:5px;font-weight:600;transition:background .2s}
+.notif-bell:hover{background:#2A2A2A}
+.notif-dot{position:absolute;top:-4px;right:-4px;background:#ef4444;color:#fff;font-size:10px;font-weight:800;border-radius:20px;padding:1px 5px;min-width:18px;text-align:center;display:none}
+.notif-dropdown{position:absolute;top:calc(100% + 8px);right:0;width:340px;background:#191919;border:1px solid #2A2A2A;border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.5);z-index:500;display:none;overflow:hidden}
 .notif-dropdown.open{display:block}
-.notif-hdr{padding:12px 16px;background:var(--primary);color:#fff;font-size:13px;font-weight:700;display:flex;justify-content:space-between;align-items:center}
+.notif-hdr{padding:12px 16px;background:#000;color:#F5F5F5;font-size:13px;font-weight:700;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #2A2A2A}
 .notif-list{max-height:320px;overflow-y:auto}
-.notif-item{padding:12px 16px;border-bottom:1px solid #f1f5f9;display:flex;gap:10px;align-items:flex-start}
-.notif-item.unread{background:#f0f9ff}
+.notif-item{padding:12px 16px;border-bottom:1px solid #2A2A2A;display:flex;gap:10px;align-items:flex-start}
+.notif-item.unread{background:#1F1F1F}
 .notif-icon{font-size:20px;flex-shrink:0;margin-top:2px}
 .notif-body{flex:1}
-.notif-title{font-size:13px;font-weight:700;color:var(--primary)}
-.notif-sub{font-size:11px;color:#64748b;margin-top:2px}
-.notif-time{font-size:10px;color:#94a3b8;margin-top:4px}
-.notif-empty{padding:28px;text-align:center;color:#94a3b8;font-size:13px}
+.notif-title{font-size:13px;font-weight:700;color:#FFBA07}
+.notif-sub{font-size:11px;color:#8A8A8A;margin-top:2px}
+.notif-time{font-size:10px;color:#8A8A8A;margin-top:4px}
+.notif-empty{padding:28px;text-align:center;color:#8A8A8A;font-size:13px}
 
 /* TABS */
-.tabs{display:flex;gap:4px;padding:14px 28px 0;background:#fff;border-bottom:2px solid var(--border);overflow-x:auto}
-.tab-btn{padding:10px 20px;border:none;background:none;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:all .2s}
-.tab-btn.active{color:var(--primary);border-bottom-color:var(--primary)}
-.tab-btn:hover{color:var(--primary)}
+.tabs{display:flex;gap:4px;padding:14px 28px 0;background:#000;border-bottom:1px solid #2A2A2A;overflow-x:auto}
+.tab-btn{padding:10px 20px;border:none;background:none;font-size:13px;font-weight:600;color:#8A8A8A;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:all .2s}
+.tab-btn.active{color:#FFBA07;border-bottom-color:#FFBA07}
+.tab-btn:hover{color:#FFBA07}
 .tab-content{display:none;padding:24px 28px;max-width:1400px;margin:0 auto}
 .tab-content.active{display:block}
 
 /* BUTTONS */
 .btn{padding:7px 14px;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:all .18s;white-space:nowrap}
-.btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.15)}
-.btn-primary{background:var(--primary);color:#fff}
-.btn-accent{background:var(--accent);color:#fff}
-.btn-green{background:var(--green);color:#fff}
-.btn-red{background:var(--red);color:#fff}
-.btn-gray{background:#64748b;color:#fff}
-.btn-white{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.25)}
+.btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.3)}
+.btn-primary{background:#FFBA07;color:#0D0D0D}
+.btn-accent{background:#FFBA07;color:#0D0D0D}
+.btn-green{background:#22c55e;color:#fff}
+.btn-red{background:#ef4444;color:#fff}
+.btn-gray{background:#3A3A3A;color:#F5F5F5}
+.btn-white{background:#1F1F1F;color:#F5F5F5;border:1px solid #2A2A2A}
 .btn-sm{padding:4px 9px;font-size:11px}
-.btn-demo{background:#f59e0b;color:#1e293b}
+.btn-demo{background:#FFBA07;color:#0D0D0D}
 
 /* CARDS */
 .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:22px}
-.kpi{background:#fff;border-radius:14px;padding:18px 20px;box-shadow:0 2px 8px rgba(0,0,0,.06);border-left:4px solid var(--accent);position:relative;overflow:hidden}
+.kpi{background:#191919;border-radius:12px;padding:18px 20px;border:1px solid #2A2A2A;border-left:4px solid #FFBA07;position:relative;overflow:hidden}
 .kpi-icon{font-size:28px;margin-bottom:6px}
-.kpi-val{font-size:28px;font-weight:800;color:var(--primary);line-height:1}
-.kpi-lbl{font-size:12px;color:var(--muted);margin-top:4px;font-weight:600}
-.kpi.green{border-left-color:var(--green)}
-.kpi.orange{border-left-color:var(--orange)}
-.kpi.red{border-left-color:var(--red)}
-.kpi.purple{border-left-color:var(--purple)}
+.kpi-val{font-size:28px;font-weight:800;color:#FFBA07;line-height:1}
+.kpi-lbl{font-size:12px;color:#8A8A8A;margin-top:4px;font-weight:600}
+.kpi.green{border-left-color:#22c55e}
+.kpi.orange{border-left-color:#f77f00}
+.kpi.red{border-left-color:#ef4444}
+.kpi.purple{border-left-color:#a855f7}
 
 /* ROOM CARDS */
 .room-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px;margin-bottom:24px}
-.room-card{background:#fff;border-radius:16px;padding:20px;box-shadow:0 2px 10px rgba(0,0,0,.07);border:2px solid transparent;transition:all .2s;cursor:pointer}
-.room-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.1)}
-.room-card.available{border-color:#06d6a0}
-.room-card.booked{border-color:#e63946}
+.room-card{background:#191919;border-radius:12px;padding:20px;border:1px solid #2A2A2A;transition:all .2s;cursor:pointer}
+.room-card:hover{transform:translateY(-2px);border-color:#FFBA07;box-shadow:0 6px 20px rgba(255,186,7,.1)}
+.room-card.available{border-color:#22c55e}
+.room-card.booked{border-color:#ef4444}
 .room-card.partial{border-color:#f77f00}
 .room-status{display:inline-block;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;margin-bottom:12px}
-.status-available{background:#d1fae5;color:#065f46}
-.status-booked{background:#fee2e2;color:#991b1b}
-.status-partial{background:#fef3c7;color:#92400e}
-.room-name{font-size:16px;font-weight:800;color:var(--primary);margin-bottom:4px}
-.room-cap{font-size:12px;color:var(--muted);margin-bottom:10px}
+.status-available{background:rgba(34,197,94,.15);color:#22c55e}
+.status-booked{background:rgba(239,68,68,.15);color:#ef4444}
+.status-partial{background:rgba(247,127,0,.15);color:#f77f00}
+.room-name{font-size:16px;font-weight:800;color:#F5F5F5;margin-bottom:4px}
+.room-cap{font-size:12px;color:#8A8A8A;margin-bottom:10px}
 .room-facilities{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px}
-.facility-tag{background:#f0f4f8;color:#334155;font-size:10px;padding:3px 8px;border-radius:6px;font-weight:600}
-.room-next{font-size:11px;color:var(--muted);border-top:1px solid #f1f5f9;padding-top:10px}
+.facility-tag{background:#2A2A2A;color:#F5F5F5;font-size:10px;padding:3px 8px;border-radius:6px;font-weight:600}
+.room-next{font-size:11px;color:#8A8A8A;border-top:1px solid #2A2A2A;padding-top:10px}
 .book-now-btn{width:100%;margin-top:10px;justify-content:center;font-size:13px;padding:9px}
 
 /* TIMELINE */
-.timeline-wrap{background:#fff;border-radius:14px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:22px;overflow-x:auto}
-.timeline-title{font-size:14px;font-weight:700;color:var(--primary);margin-bottom:16px}
+.timeline-wrap{background:#191919;border-radius:12px;padding:20px;border:1px solid #2A2A2A;margin-bottom:22px;overflow-x:auto}
+.timeline-title{font-size:14px;font-weight:700;color:#FFBA07;margin-bottom:16px}
 .timeline-grid{display:grid;min-width:900px}
 .tl-header{display:flex;margin-bottom:4px}
-.tl-room-label{width:140px;flex-shrink:0;font-size:11px;font-weight:700;color:var(--muted);padding-right:8px}
+.tl-room-label{width:140px;flex-shrink:0;font-size:11px;font-weight:700;color:#8A8A8A;padding-right:8px}
 .tl-hours{flex:1;display:flex}
-.tl-hour{flex:1;font-size:10px;color:var(--muted);font-weight:600;text-align:center;border-left:1px dashed #e2e8f0;padding-top:2px}
+.tl-hour{flex:1;font-size:10px;color:#8A8A8A;font-weight:600;text-align:center;border-left:1px dashed #2A2A2A;padding-top:2px}
 .tl-row{display:flex;margin-bottom:6px;align-items:center}
-.tl-room-name{width:140px;flex-shrink:0;font-size:12px;font-weight:700;color:var(--primary);padding-right:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.tl-bar-wrap{flex:1;height:28px;background:#f8fafc;border-radius:6px;position:relative;border:1px solid #e2e8f0}
-.tl-block{position:absolute;top:2px;bottom:2px;border-radius:5px;display:flex;align-items:center;padding:0 6px;font-size:10px;font-weight:700;color:#fff;overflow:hidden;white-space:nowrap;cursor:pointer}
-.tl-now{position:absolute;top:0;bottom:0;width:2px;background:#e63946;z-index:2}
+.tl-room-name{width:140px;flex-shrink:0;font-size:12px;font-weight:700;color:#F5F5F5;padding-right:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tl-bar-wrap{flex:1;height:28px;background:#0D0D0D;border-radius:6px;position:relative;border:1px solid #2A2A2A}
+.tl-block{position:absolute;top:2px;bottom:2px;border-radius:5px;display:flex;align-items:center;padding:0 6px;font-size:10px;font-weight:700;color:#0D0D0D;overflow:hidden;white-space:nowrap;cursor:pointer}
+.tl-now{position:absolute;top:0;bottom:0;width:2px;background:#ef4444;z-index:2}
 
 /* FORM */
-.panel{background:#fff;border-radius:14px;box-shadow:0 2px 8px rgba(0,0,0,.06);overflow:hidden;margin-bottom:20px}
-.panel-hdr{background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff;padding:13px 18px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px}
+.panel{background:#191919;border-radius:12px;border:1px solid #2A2A2A;overflow:hidden;margin-bottom:20px}
+.panel-hdr{background:#000;color:#F5F5F5;padding:13px 18px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px;border-bottom:1px solid #2A2A2A}
 .panel-body{padding:20px}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
 .form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px}
 .form-group{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
-.form-group label{font-size:12px;font-weight:700;color:var(--muted)}
-.form-group input,.form-group select,.form-group textarea{padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;outline:none;transition:border .2s;font-family:inherit}
-.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--accent)}
-.preview-box{background:#f0f9ff;border:1.5px solid #bae6fd;border-radius:10px;padding:14px;margin:14px 0;font-size:12px}
-.preview-box strong{color:var(--primary);display:block;margin-bottom:6px;font-size:13px}
+.form-group label{font-size:12px;font-weight:700;color:#8A8A8A}
+.form-group input,.form-group select,.form-group textarea{padding:9px 12px;border:1.5px solid #2A2A2A;border-radius:8px;font-size:13px;outline:none;transition:border .2s;font-family:inherit;background:#0D0D0D;color:#F5F5F5}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:#FFBA07}
+.form-group select option{background:#191919;color:#F5F5F5}
+.preview-box{background:#1F1F1F;border:1.5px solid #2A2A2A;border-radius:10px;padding:14px;margin:14px 0;font-size:12px}
+.preview-box strong{color:#FFBA07;display:block;margin-bottom:6px;font-size:13px}
 
 /* TABLE */
 .tbl-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:13px}
-th{background:#f8fafc;color:var(--primary);font-weight:700;padding:10px 14px;border-bottom:2px solid var(--border);text-align:left;white-space:nowrap}
-td{padding:10px 14px;border-bottom:1px solid #f1f5f9;vertical-align:middle}
-tr:hover td{background:#fafbfc}
+th{background:#000;color:#FFBA07;font-weight:700;padding:10px 14px;border-bottom:2px solid #2A2A2A;text-align:left;white-space:nowrap}
+td{padding:10px 14px;border-bottom:1px solid #2A2A2A;vertical-align:middle;color:#F5F5F5}
+tr:hover td{background:#1F1F1F}
 .badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700}
-.b-confirmed{background:#d1fae5;color:#065f46}
-.b-cancelled{background:#fee2e2;color:#991b1b}
-.b-ongoing{background:#dbeafe;color:#1e40af}
-.b-upcoming{background:#fef3c7;color:#92400e}
-.empty-msg{text-align:center;color:var(--muted);padding:30px;font-size:13px}
+.b-confirmed{background:rgba(34,197,94,.15);color:#22c55e}
+.b-cancelled{background:rgba(239,68,68,.15);color:#ef4444}
+.b-ongoing{background:rgba(96,165,250,.15);color:#60a5fa}
+.b-upcoming{background:rgba(255,186,7,.15);color:#FFBA07}
+.empty-msg{text-align:center;color:#8A8A8A;padding:30px;font-size:13px}
 
 /* CONFLICT */
-.conflict-box{background:#fff1f2;border:2px solid #fca5a5;border-radius:10px;padding:12px 16px;margin:10px 0;color:#991b1b;font-size:12px;font-weight:600;display:none}
+.conflict-box{background:rgba(239,68,68,.1);border:2px solid #ef4444;border-radius:10px;padding:12px 16px;margin:10px 0;color:#ef4444;font-size:12px;font-weight:600;display:none}
 
 /* TOAST */
-.toast{position:fixed;bottom:24px;right:24px;padding:12px 20px;border-radius:10px;color:#fff;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.2);transform:translateY(80px);opacity:0;transition:all .3s}
+.toast{position:fixed;bottom:24px;right:24px;padding:12px 20px;border-radius:10px;color:#fff;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.4);transform:translateY(80px);opacity:0;transition:all .3s}
 .toast.show{transform:translateY(0);opacity:1}
 
 /* SEC TITLE */
-.sec-title{font-size:18px;font-weight:800;color:var(--primary);margin-bottom:18px;padding-bottom:8px;border-bottom:2px solid var(--border)}
+.sec-title{font-size:18px;font-weight:800;color:#F5F5F5;margin-bottom:18px;padding-bottom:8px;border-bottom:2px solid #2A2A2A}
 
 /* FILTER BAR */
 .filter-bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;align-items:center}
-.filter-bar select,.filter-bar input{padding:7px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:12px;outline:none}
-.filter-bar select:focus,.filter-bar input:focus{border-color:var(--accent)}
+.filter-bar select,.filter-bar input{padding:7px 12px;border:1.5px solid #2A2A2A;border-radius:8px;font-size:12px;outline:none;background:#0D0D0D;color:#F5F5F5}
+.filter-bar select:focus,.filter-bar input:focus{border-color:#FFBA07}
+.filter-bar select option{background:#191919;color:#F5F5F5}
 
 @media(max-width:768px){
   .form-row,.form-row-3{grid-template-columns:1fr}
@@ -168,11 +170,11 @@ tr:hover td{background:#fafbfc}
   header{padding:0 14px}
   .tabs{padding:10px 14px 0}
 }
-#googleLoginScreen{position:fixed;inset:0;background:linear-gradient(135deg,#0f4c75 0%,#00b4d8 100%);display:flex;align-items:center;justify-content:center;z-index:9999}
-.g-login-box{background:#fff;border-radius:20px;padding:40px 44px;width:360px;box-shadow:0 20px 60px rgba(0,0,0,.3);text-align:center}
-.g-login-logo{width:60px;height:60px;background:linear-gradient(135deg,#0f4c75,#00b4d8);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 16px}
-.g-login-box h2{font-size:20px;font-weight:800;color:#0f4c75;margin-bottom:4px}
-.g-login-box p{font-size:12px;color:#64748b;margin-bottom:24px}
+#googleLoginScreen{position:fixed;inset:0;background:#0D0D0D;display:flex;align-items:center;justify-content:center;z-index:9999}
+.g-login-box{background:#191919;border:1px solid #2A2A2A;border-radius:12px;padding:40px 44px;width:360px;box-shadow:0 20px 60px rgba(0,0,0,.6);text-align:center}
+.g-login-logo{width:60px;height:60px;background:#FFBA07;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 16px}
+.g-login-box h2{font-size:20px;font-weight:800;color:#F5F5F5;margin-bottom:4px}
+.g-login-box p{font-size:12px;color:#8A8A8A;margin-bottom:24px}
 .g-login-err{color:#ef4444;font-size:12px;margin-top:12px;display:none}
 </style>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -236,71 +238,71 @@ tr:hover td{background:#fafbfc}
 </div>
 
 <!-- EMAIL PROMPT MODAL -->
-<div id="emailPromptModal" style="position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:9999">
-  <div style="background:#fff;border-radius:20px;padding:32px;width:400px;box-shadow:0 20px 60px rgba(0,0,0,.3);text-align:center">
+<div id="emailPromptModal" style="position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:9999">
+  <div style="background:#191919;border:1px solid #2A2A2A;border-radius:12px;padding:32px;width:400px;box-shadow:0 20px 60px rgba(0,0,0,.6);text-align:center">
     <div style="font-size:48px;margin-bottom:12px" id="emailPromptIcon"></div>
-    <h3 style="color:#0f4c75;margin-bottom:6px;font-size:18px" id="emailPromptTitle"></h3>
-    <p style="font-size:13px;color:#64748b;margin-bottom:10px">Employee email:</p>
-    <input id="emailPromptAddr" type="email" style="width:100%;padding:10px 14px;border:2px solid #00b4d8;border-radius:10px;font-size:14px;margin-bottom:18px;outline:none;text-align:center;font-weight:700;color:#0f4c75" placeholder="employee@company.com"/>
+    <h3 style="color:#F5F5F5;margin-bottom:6px;font-size:18px" id="emailPromptTitle"></h3>
+    <p style="font-size:13px;color:#8A8A8A;margin-bottom:10px">Employee email:</p>
+    <input id="emailPromptAddr" type="email" style="width:100%;padding:10px 14px;border:2px solid #FFBA07;border-radius:8px;font-size:14px;margin-bottom:18px;outline:none;text-align:center;font-weight:700;color:#F5F5F5;background:#0D0D0D" placeholder="employee@company.com"/>
     <button id="emailPromptBtn" onclick="openGmailNow()"
-      style="width:100%;background:linear-gradient(135deg,#06d6a0,#0f4c75);color:#fff;padding:16px;border-radius:12px;font-weight:800;font-size:16px;border:none;cursor:pointer;margin-bottom:10px">
+      style="width:100%;background:#FFBA07;color:#0D0D0D;padding:16px;border-radius:8px;font-weight:800;font-size:16px;border:none;cursor:pointer;margin-bottom:10px">
       &#128140; Open Gmail &amp; Send Email
     </button>
     <button onclick="document.getElementById('emailPromptModal').style.display='none'"
-      style="background:none;border:none;color:#94a3b8;font-size:13px;cursor:pointer;text-decoration:underline">Skip</button>
+      style="background:none;border:none;color:#8A8A8A;font-size:13px;cursor:pointer;text-decoration:underline">Skip</button>
   </div>
 </div>
 
 <!-- REJECT MODAL -->
 <div id="rejectModal">
   <div class="reject-box" style="width:420px">
-    <h3 style="color:#e63946;margin-bottom:16px;font-size:18px">&#10060; Reject Booking</h3>
+    <h3 style="color:#ef4444;margin-bottom:16px;font-size:18px">&#10060; Reject Booking</h3>
     <input type="hidden" id="rejectBookingId"/>
-    <div style="font-size:12px;font-weight:700;color:#64748b;margin-bottom:5px">REASON FOR REJECTION *</div>
+    <div style="font-size:12px;font-weight:700;color:#8A8A8A;margin-bottom:5px">REASON FOR REJECTION *</div>
     <textarea id="rejectReason" rows="3" placeholder="e.g. Room not available, Please reschedule to another slot..."
-      style="width:100%;padding:10px;border:1.5px solid #dde3ea;border-radius:8px;font-size:13px;outline:none;resize:none;margin-bottom:14px"></textarea>
-    <div style="font-size:12px;font-weight:700;color:#64748b;margin-bottom:5px">EMPLOYEE EMAIL *</div>
+      style="width:100%;padding:10px;border:1.5px solid #2A2A2A;border-radius:8px;font-size:13px;outline:none;resize:none;margin-bottom:14px;background:#0D0D0D;color:#F5F5F5"></textarea>
+    <div style="font-size:12px;font-weight:700;color:#8A8A8A;margin-bottom:5px">EMPLOYEE EMAIL *</div>
     <input type="email" id="rejectEmail" placeholder="employee@cuemath.com"
-      style="width:100%;padding:10px;border:1.5px solid #00b4d8;border-radius:8px;font-size:13px;outline:none;margin-bottom:16px;font-weight:600;color:#0f4c75"/>
+      style="width:100%;padding:10px;border:1.5px solid #2A2A2A;border-radius:8px;font-size:13px;outline:none;margin-bottom:16px;font-weight:600;color:#F5F5F5;background:#0D0D0D"/>
     <button onclick="confirmRejectAndSend()"
-      style="width:100%;display:block;background:linear-gradient(135deg,#e63946,#c1121f);color:#fff;padding:14px;border-radius:10px;font-weight:800;font-size:15px;text-align:center;border:none;cursor:pointer;margin-bottom:10px">
+      style="width:100%;display:block;background:#ef4444;color:#fff;padding:14px;border-radius:8px;font-weight:800;font-size:15px;text-align:center;border:none;cursor:pointer;margin-bottom:10px">
       &#10060; Reject &amp; Send Email to Employee
     </button>
-    <button onclick="closeRejectModal()" style="width:100%;background:none;border:1.5px solid #dde3ea;border-radius:8px;padding:10px;color:#64748b;font-size:13px;cursor:pointer">Cancel</button>
+    <button onclick="closeRejectModal()" style="width:100%;background:none;border:1.5px solid #2A2A2A;border-radius:8px;padding:10px;color:#8A8A8A;font-size:13px;cursor:pointer">Cancel</button>
   </div>
 </div>
 
 <!-- APPROVE MODAL -->
-<div id="approveModal" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:9998">
+<div id="approveModal" style="position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:9998">
   <div class="reject-box" style="width:460px">
-    <h3 style="color:#06d6a0;margin-bottom:16px;font-size:18px">&#10003; Approve Booking</h3>
+    <h3 style="color:#22c55e;margin-bottom:16px;font-size:18px">&#10003; Approve Booking</h3>
     <input type="hidden" id="approveBookingId"/>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
       <div>
-        <div style="font-size:11px;font-weight:700;color:#64748b;margin-bottom:4px">ROOM</div>
-        <select id="approveRoom" style="width:100%;padding:9px;border:1.5px solid #86efac;border-radius:8px;font-size:13px;outline:none"></select>
+        <div style="font-size:11px;font-weight:700;color:#8A8A8A;margin-bottom:4px">ROOM</div>
+        <select id="approveRoom" style="width:100%;padding:9px;border:1.5px solid #2A2A2A;border-radius:8px;font-size:13px;outline:none;background:#0D0D0D;color:#F5F5F5"></select>
       </div>
       <div>
-        <div style="font-size:11px;font-weight:700;color:#64748b;margin-bottom:4px">DATE</div>
-        <input type="date" id="approveDate" style="width:100%;padding:9px;border:1.5px solid #86efac;border-radius:8px;font-size:13px;outline:none"/>
+        <div style="font-size:11px;font-weight:700;color:#8A8A8A;margin-bottom:4px">DATE</div>
+        <input type="date" id="approveDate" style="width:100%;padding:9px;border:1.5px solid #2A2A2A;border-radius:8px;font-size:13px;outline:none;background:#0D0D0D;color:#F5F5F5"/>
       </div>
       <div>
-        <div style="font-size:11px;font-weight:700;color:#64748b;margin-bottom:4px">START TIME</div>
-        <input type="time" id="approveStart" style="width:100%;padding:9px;border:1.5px solid #86efac;border-radius:8px;font-size:13px;outline:none"/>
+        <div style="font-size:11px;font-weight:700;color:#8A8A8A;margin-bottom:4px">START TIME</div>
+        <input type="time" id="approveStart" style="width:100%;padding:9px;border:1.5px solid #2A2A2A;border-radius:8px;font-size:13px;outline:none;background:#0D0D0D;color:#F5F5F5"/>
       </div>
       <div>
-        <div style="font-size:11px;font-weight:700;color:#64748b;margin-bottom:4px">END TIME</div>
-        <input type="time" id="approveEnd" style="width:100%;padding:9px;border:1.5px solid #86efac;border-radius:8px;font-size:13px;outline:none"/>
+        <div style="font-size:11px;font-weight:700;color:#8A8A8A;margin-bottom:4px">END TIME</div>
+        <input type="time" id="approveEnd" style="width:100%;padding:9px;border:1.5px solid #2A2A2A;border-radius:8px;font-size:13px;outline:none;background:#0D0D0D;color:#F5F5F5"/>
       </div>
     </div>
-    <div style="font-size:11px;font-weight:700;color:#64748b;margin-bottom:4px">EMPLOYEE EMAIL *</div>
+    <div style="font-size:11px;font-weight:700;color:#8A8A8A;margin-bottom:4px">EMPLOYEE EMAIL *</div>
     <input type="email" id="approveEmail" placeholder="employee@cuemath.com"
-      style="width:100%;padding:10px;border:1.5px solid #00b4d8;border-radius:8px;font-size:13px;outline:none;margin-bottom:14px;font-weight:600;color:#0f4c75"/>
+      style="width:100%;padding:10px;border:1.5px solid #2A2A2A;border-radius:8px;font-size:13px;outline:none;margin-bottom:14px;font-weight:600;color:#F5F5F5;background:#0D0D0D"/>
     <button onclick="confirmApproveAndSend()"
-      style="width:100%;display:block;background:linear-gradient(135deg,#06d6a0,#059669);color:#fff;padding:14px;border-radius:10px;font-weight:800;font-size:15px;text-align:center;border:none;cursor:pointer;margin-bottom:10px">
+      style="width:100%;display:block;background:#22c55e;color:#fff;padding:14px;border-radius:8px;font-weight:800;font-size:15px;text-align:center;border:none;cursor:pointer;margin-bottom:10px">
       &#10003; Approve &amp; Send Email to Employee
     </button>
-    <button onclick="closeApproveModal()" style="width:100%;background:none;border:1.5px solid #dde3ea;border-radius:8px;padding:10px;color:#64748b;font-size:13px;cursor:pointer">Cancel</button>
+    <button onclick="closeApproveModal()" style="width:100%;background:none;border:1.5px solid #2A2A2A;border-radius:8px;padding:10px;color:#8A8A8A;font-size:13px;cursor:pointer">Cancel</button>
   </div>
 </div>
 
