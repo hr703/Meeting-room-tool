@@ -203,7 +203,6 @@ input[type="time"]::-webkit-calendar-picker-indicator:hover{opacity:1}
 <!-- HEADER -->
 <header>
   <div class="logo">
-    <div class="logo-icon">&#128197;</div>
     <div>
       <h1>Meeting Room Booking</h1>
       <span id="dateDisplay"></span>
@@ -1415,41 +1414,7 @@ function renderRoomsTable(){
 // ================================================================
 // DEMO DATA
 // ================================================================
-function loadDemoData(){
-  rooms=[
-    {id:'RM001',name:'Board Room',      capacity:20,location:'3rd Floor',facilities:['Projector','Whiteboard','AC','Video Conf'],desc:'Main boardroom for leadership meetings'},
-    {id:'RM002',name:'Conference Room A',capacity:12,location:'2nd Floor',facilities:['Projector','AC','Whiteboard'],desc:''},
-    {id:'RM003',name:'Conference Room B',capacity:8, location:'2nd Floor',facilities:['TV Screen','AC'],desc:''},
-    {id:'RM004',name:'Training Room',   capacity:30,location:'1st Floor',facilities:['Projector','Whiteboard','AC','PA System'],desc:'Large room for training sessions'},
-    {id:'RM005',name:'Huddle Space 1',  capacity:4, location:'1st Floor',facilities:['TV Screen'],desc:'Quick sync room'},
-    {id:'RM006',name:'Interview Room',  capacity:4, location:'HR Floor',facilities:['AC','Whiteboard'],desc:'For interviews and 1-on-1s'},
-  ];
-
-  const d=today();
-  const nt=nowTime();
-  const [curH,curM]=nt.split(':').map(Number);
-  const pad=n=>String(n).padStart(2,'0');
-  const tStr=(h,m)=>`${pad(h)}:${pad(m)}`;
-
-  // Generate bookings around current time
-  const ph=curH; // previous hour
-  bookings=[
-    {id:'BK001',roomId:'RM001',date:d,start:tStr(9,0),  end:tStr(10,0), purpose:'Weekly Leadership Sync',   organizer:'Manish Tiwari', attendees:12,notes:'Q1 review agenda',status:'Confirmed',createdAt:''},
-    {id:'BK002',roomId:'RM002',date:d,start:tStr(10,0), end:tStr(11,30),purpose:'Client Demo – TechCorp',    organizer:'Sneha Iyer',    attendees:6, notes:'Product walkthrough',status:'Confirmed',createdAt:''},
-    {id:'BK003',roomId:'RM003',date:d,start:tStr(ph,0), end:tStr(ph+1,0),purpose:'Sprint Planning',         organizer:'Rohit Joshi',   attendees:8, notes:'Sprint 24 planning',status:'Confirmed',createdAt:''},
-    {id:'BK004',roomId:'RM004',date:d,start:tStr(14,0), end:tStr(17,0), purpose:'New Joiner Induction',     organizer:'Priya Mehta',   attendees:25,notes:'Batch of 8 joiners',status:'Confirmed',createdAt:''},
-    {id:'BK005',roomId:'RM005',date:d,start:tStr(ph,30),end:tStr(ph+1,0),purpose:'Design Review',           organizer:'Kavita Nair',   attendees:3, notes:'',status:'Confirmed',createdAt:''},
-    {id:'BK006',roomId:'RM006',date:d,start:tStr(11,0), end:tStr(12,0), purpose:'Interview – Sr. Engineer', organizer:'Rahul Sharma',  attendees:3, notes:'Panel round',status:'Confirmed',createdAt:''},
-    {id:'BK007',roomId:'RM001',date:d,start:tStr(15,0), end:tStr(16,0), purpose:'Board Review',             organizer:'Manish Tiwari', attendees:10,notes:'Monthly P&L review',status:'Confirmed',createdAt:''},
-    {id:'BK008',roomId:'RM002',date:d,start:tStr(16,0), end:tStr(17,0), purpose:'Quarterly Planning',       organizer:'Ananya Reddy',  attendees:8, notes:'',status:'Confirmed',createdAt:''},
-    // Tomorrow
-    {id:'BK009',roomId:'RM001',date:getTomorrow(),start:'09:00',end:'10:00',purpose:'Investor Call',         organizer:'Manish Tiwari', attendees:5, notes:'Series B discussion',status:'Confirmed',createdAt:''},
-    {id:'BK010',roomId:'RM004',date:getTomorrow(),start:'10:00',end:'13:00',purpose:'All Hands Meeting',     organizer:'Priya Mehta',   attendees:30,notes:'Company update',status:'Confirmed',createdAt:''},
-  ];
-
-  save(); renderDashboard(); populateRoomDropdowns();
-  toast('Demo: 6 rooms + 10 bookings loaded!','#06d6a0');
-}
+function loadDemoData(){ /* disabled — tool is live */ }
 
 function getTomorrow(){
   const d=new Date(); d.setDate(d.getDate()+1);
