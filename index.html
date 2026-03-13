@@ -4,6 +4,8 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Meeting Room Booking</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -11,7 +13,7 @@
   --green:#22c55e;--orange:#f77f00;--red:#ef4444;--purple:#a855f7;
   --bg:#0D0D0D;--card:#191919;--border:#2A2A2A;--text:#F5F5F5;--muted:#8A8A8A;
 }
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
 
 /* ADMIN LOGIN POPUP */
 .modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:9999}
@@ -233,7 +235,7 @@ tr:hover td{background:#1F1F1F}
     <input type="password" id="adminPass" placeholder="Admin password" onkeydown="if(event.key==='Enter')doAdminLogin()"/>
     <button class="login-btn" onclick="doAdminLogin()">&#128275; Login as Admin</button>
     <div class="login-err" id="adminLoginErr">&#10060; Incorrect password.</div>
-    <button onclick="closeAdminLogin()" style="background:none;border:none;color:#64748b;font-size:12px;margin-top:12px;cursor:pointer">Cancel</button>
+    <button onclick="closeAdminLogin()" style="background:none;border:none;color:#8A8A8A;font-size:12px;margin-top:12px;cursor:pointer">Cancel</button>
   </div>
 </div>
 
@@ -309,82 +311,82 @@ tr:hover td{background:#1F1F1F}
 <!-- MODIFY MODAL -->
 <div id="modifyModal" style="position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:9998">
   <div class="reject-box" style="width:460px">
-    <h3 style="color:#0f4c75;margin-bottom:16px;font-size:18px">&#9998; Modify Booking</h3>
+    <h3 style="color:#FFBA07;margin-bottom:16px;font-size:18px">Modify Booking</h3>
     <input type="hidden" id="modifyBookingId"/>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
       <div>
-        <div style="font-size:11px;font-weight:700;color:#64748b;margin-bottom:4px">ROOM</div>
-        <select id="modifyRoom" style="width:100%;padding:9px;border:1.5px solid #93c5fd;border-radius:8px;font-size:13px;outline:none"></select>
+        <div style="font-size:11px;font-weight:700;color:#8A8A8A;margin-bottom:4px">ROOM</div>
+        <select id="modifyRoom" style="width:100%;padding:9px;border:1.5px solid #2A2A2A;border-radius:8px;font-size:13px;outline:none;background:#0D0D0D;color:#F5F5F5"></select>
       </div>
       <div>
-        <div style="font-size:11px;font-weight:700;color:#64748b;margin-bottom:4px">DATE</div>
-        <input type="date" id="modifyDate" style="width:100%;padding:9px;border:1.5px solid #93c5fd;border-radius:8px;font-size:13px;outline:none"/>
+        <div style="font-size:11px;font-weight:700;color:#8A8A8A;margin-bottom:4px">DATE</div>
+        <input type="date" id="modifyDate" style="width:100%;padding:9px;border:1.5px solid #2A2A2A;border-radius:8px;font-size:13px;outline:none;background:#0D0D0D;color:#F5F5F5"/>
       </div>
       <div>
-        <div style="font-size:11px;font-weight:700;color:#64748b;margin-bottom:4px">START TIME</div>
-        <input type="time" id="modifyStart" style="width:100%;padding:9px;border:1.5px solid #93c5fd;border-radius:8px;font-size:13px;outline:none"/>
+        <div style="font-size:11px;font-weight:700;color:#8A8A8A;margin-bottom:4px">START TIME</div>
+        <input type="time" id="modifyStart" style="width:100%;padding:9px;border:1.5px solid #2A2A2A;border-radius:8px;font-size:13px;outline:none;background:#0D0D0D;color:#F5F5F5"/>
       </div>
       <div>
-        <div style="font-size:11px;font-weight:700;color:#64748b;margin-bottom:4px">END TIME</div>
-        <input type="time" id="modifyEnd" style="width:100%;padding:9px;border:1.5px solid #93c5fd;border-radius:8px;font-size:13px;outline:none"/>
+        <div style="font-size:11px;font-weight:700;color:#8A8A8A;margin-bottom:4px">END TIME</div>
+        <input type="time" id="modifyEnd" style="width:100%;padding:9px;border:1.5px solid #2A2A2A;border-radius:8px;font-size:13px;outline:none;background:#0D0D0D;color:#F5F5F5"/>
       </div>
     </div>
-    <div style="font-size:11px;font-weight:700;color:#64748b;margin-bottom:4px">STATUS</div>
-    <select id="modifyStatus" style="width:100%;padding:9px;border:1.5px solid #93c5fd;border-radius:8px;font-size:13px;outline:none;margin-bottom:12px">
+    <div style="font-size:11px;font-weight:700;color:#8A8A8A;margin-bottom:4px">STATUS</div>
+    <select id="modifyStatus" style="width:100%;padding:9px;border:1.5px solid #2A2A2A;border-radius:8px;font-size:13px;outline:none;margin-bottom:12px;background:#0D0D0D;color:#F5F5F5">
       <option value="Confirmed">Confirmed (Approved)</option>
       <option value="Rejected">Rejected</option>
       <option value="Cancelled">Cancelled</option>
     </select>
-    <div style="font-size:11px;font-weight:700;color:#64748b;margin-bottom:4px">NOTE / REASON (optional)</div>
+    <div style="font-size:11px;font-weight:700;color:#8A8A8A;margin-bottom:4px">NOTE / REASON (optional)</div>
     <textarea id="modifyReason" rows="2" placeholder="Add a note for the employee..."
-      style="width:100%;padding:10px;border:1.5px solid #93c5fd;border-radius:8px;font-size:13px;outline:none;resize:none;margin-bottom:12px"></textarea>
-    <div style="font-size:11px;font-weight:700;color:#64748b;margin-bottom:4px">EMPLOYEE EMAIL</div>
+      style="width:100%;padding:10px;border:1.5px solid #2A2A2A;border-radius:8px;font-size:13px;outline:none;resize:none;margin-bottom:12px;background:#0D0D0D;color:#F5F5F5"></textarea>
+    <div style="font-size:11px;font-weight:700;color:#8A8A8A;margin-bottom:4px">EMPLOYEE EMAIL</div>
     <input type="email" id="modifyEmail" placeholder="employee@cuemath.com"
-      style="width:100%;padding:10px;border:1.5px solid #00b4d8;border-radius:8px;font-size:13px;outline:none;margin-bottom:16px;font-weight:600;color:#0f4c75"/>
+      style="width:100%;padding:10px;border:1.5px solid #2A2A2A;border-radius:8px;font-size:13px;outline:none;margin-bottom:16px;font-weight:600;color:#F5F5F5;background:#0D0D0D"/>
     <button onclick="confirmModify()"
-      style="width:100%;display:block;background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;padding:14px;border-radius:10px;font-weight:800;font-size:15px;text-align:center;border:none;cursor:pointer;margin-bottom:10px">
-      &#9998; Save Changes &amp; Notify Employee
+      style="width:100%;display:block;background:#FFBA07;color:#0D0D0D;padding:14px;border-radius:8px;font-weight:800;font-size:15px;text-align:center;border:none;cursor:pointer;margin-bottom:10px">
+      Save Changes &amp; Notify Employee
     </button>
-    <button onclick="closeModifyModal()" style="width:100%;background:none;border:1.5px solid #dde3ea;border-radius:8px;padding:10px;color:#64748b;font-size:13px;cursor:pointer">Cancel</button>
+    <button onclick="closeModifyModal()" style="width:100%;background:none;border:1.5px solid #2A2A2A;border-radius:8px;padding:10px;color:#8A8A8A;font-size:13px;cursor:pointer">Cancel</button>
   </div>
 </div>
 
 <!-- TABS -->
 <div class="tabs">
-  <button class="tab-btn active" onclick="switchTab('dashboard',this)">&#127968; Dashboard</button>
-  <button class="tab-btn" onclick="switchTab('book',this)">&#43; Book Room</button>
-  <button class="tab-btn" onclick="switchTab('bookings',this)">&#128203; All Bookings</button>
-  <button class="tab-btn admin-only" style="display:none" onclick="switchTab('admin',this)">&#128272; Approvals <span id="pendingBadge" style="background:#e63946;color:#fff;border-radius:20px;padding:1px 7px;font-size:11px;margin-left:4px">0</span></button>
-  <button class="tab-btn admin-only" style="display:none" onclick="switchTab('rooms',this)">&#127970; Manage Rooms</button>
+  <button class="tab-btn active" onclick="switchTab('dashboard',this)">Dashboard</button>
+  <button class="tab-btn" onclick="switchTab('book',this)">+ Book Room</button>
+  <button class="tab-btn" onclick="switchTab('bookings',this)">All Bookings</button>
+  <button class="tab-btn admin-only" style="display:none" onclick="switchTab('admin',this)">Approvals <span id="pendingBadge" style="background:#ef4444;color:#fff;border-radius:20px;padding:1px 7px;font-size:11px;margin-left:4px">0</span></button>
+  <button class="tab-btn admin-only" style="display:none" onclick="switchTab('rooms',this)">Manage Rooms</button>
 </div>
 
 <!-- DASHBOARD -->
 <div class="tab-content active" id="tab-dashboard">
-  <div class="sec-title">&#127968; Today's Overview</div>
+  <div class="sec-title">Today's Overview</div>
   <div class="kpi-grid">
-    <div class="kpi green"><div class="kpi-icon">&#9989;</div><div class="kpi-val" id="kpi-available">0</div><div class="kpi-lbl">Available Now</div></div>
-    <div class="kpi red"><div class="kpi-icon">&#128245;</div><div class="kpi-val" id="kpi-booked-now">0</div><div class="kpi-lbl">In Use Now</div></div>
-    <div class="kpi orange"><div class="kpi-icon">&#128336;</div><div class="kpi-val" id="kpi-today">0</div><div class="kpi-lbl">Bookings Today</div></div>
-    <div class="kpi purple"><div class="kpi-icon">&#128101;</div><div class="kpi-val" id="kpi-total-rooms">0</div><div class="kpi-lbl">Total Rooms</div></div>
-    <div class="kpi"><div class="kpi-icon">&#128337;</div><div class="kpi-val" id="kpi-upcoming">0</div><div class="kpi-lbl">Upcoming Today</div></div>
+    <div class="kpi green"><div class="kpi-val" id="kpi-available">0</div><div class="kpi-lbl">Available Now</div></div>
+    <div class="kpi red"><div class="kpi-val" id="kpi-booked-now">0</div><div class="kpi-lbl">In Use Now</div></div>
+    <div class="kpi orange"><div class="kpi-val" id="kpi-today">0</div><div class="kpi-lbl">Bookings Today</div></div>
+    <div class="kpi purple"><div class="kpi-val" id="kpi-total-rooms">0</div><div class="kpi-lbl">Total Rooms</div></div>
+    <div class="kpi"><div class="kpi-val" id="kpi-upcoming">0</div><div class="kpi-lbl">Upcoming Today</div></div>
   </div>
 
   <!-- Room Cards -->
-  <div class="sec-title" style="font-size:15px">&#127970; Room Status</div>
+  <div class="sec-title" style="font-size:15px">Room Status</div>
   <div class="room-grid" id="roomCards"></div>
 
   <!-- Timeline -->
   <div class="timeline-wrap">
     <div class="timeline-title" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
-      <span>&#128336; Room Availability Timeline (8 AM – 8 PM)</span>
-      <input type="date" id="timelineDate" onchange="renderTimeline();renderTodayTable()" style="padding:6px 12px;border:1.5px solid #00b4d8;border-radius:8px;font-size:13px;font-weight:600;color:#0f4c75;outline:none;cursor:pointer"/>
+      <span>Room Availability Timeline (8 AM – 8 PM)</span>
+      <input type="date" id="timelineDate" onchange="renderTimeline();renderTodayTable()" style="padding:6px 12px;border:1.5px solid #2A2A2A;border-radius:8px;font-size:13px;font-weight:600;color:#F5F5F5;background:#0D0D0D;outline:none;cursor:pointer"/>
     </div>
     <div class="timeline-grid" id="timelineGrid"></div>
   </div>
 
   <!-- Today's Bookings -->
   <div class="panel">
-    <div class="panel-hdr">&#128203; Bookings</div>
+    <div class="panel-hdr">Bookings</div>
     <div class="panel-body">
       <div class="tbl-wrap">
         <table>
@@ -398,11 +400,11 @@ tr:hover td{background:#1F1F1F}
 
 <!-- BOOK ROOM -->
 <div class="tab-content" id="tab-book">
-  <div class="sec-title">&#43; Book a Meeting Room</div>
+  <div class="sec-title">Book a Meeting Room</div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
     <div>
       <div class="panel">
-        <div class="panel-hdr" id="bookFormTitle">&#128197; New Booking</div>
+        <div class="panel-hdr" id="bookFormTitle">New Booking</div>
         <div class="panel-body">
           <input type="hidden" id="b-editId"/>
           <div class="form-row">
@@ -468,13 +470,13 @@ tr:hover td{background:#1F1F1F}
     <!-- Available Rooms Panel -->
     <div>
       <div class="panel">
-        <div class="panel-hdr">&#9989; Available Rooms for Selected Slot</div>
+        <div class="panel-hdr">Available Rooms for Selected Slot</div>
         <div class="panel-body" id="availRoomsPanel">
           <div style="color:var(--muted);font-size:13px;text-align:center;padding:20px">Select date & time to check availability</div>
         </div>
       </div>
       <div class="panel">
-        <div class="panel-hdr">&#128336; Upcoming Bookings (Today)</div>
+        <div class="panel-hdr">Upcoming Bookings (Today)</div>
         <div class="panel-body">
           <div id="upcomingList" style="font-size:12px"></div>
         </div>
@@ -485,7 +487,7 @@ tr:hover td{background:#1F1F1F}
 
 <!-- ALL BOOKINGS -->
 <div class="tab-content" id="tab-bookings">
-  <div class="sec-title">&#128203; All Bookings</div>
+  <div class="sec-title">All Bookings</div>
   <div class="filter-bar">
     <input type="date" id="flt-date" onchange="renderBookingsTable()"/>
     <select id="flt-room" onchange="renderBookingsTable()"><option value="">All Rooms</option></select>
@@ -510,11 +512,11 @@ tr:hover td{background:#1F1F1F}
 
 <!-- ADMIN APPROVALS -->
 <div class="tab-content" id="tab-admin">
-  <div class="sec-title">&#128272; Booking Approvals</div>
+  <div class="sec-title">Booking Approvals</div>
 
   <!-- Pending -->
   <div class="panel" style="margin-bottom:20px">
-    <div class="panel-hdr" style="background:linear-gradient(135deg,#f77f00,#f59e0b)">&#9203; Pending Requests</div>
+    <div class="panel-hdr" style="color:#f77f00">Pending Requests</div>
     <div class="panel-body">
       <div class="tbl-wrap">
         <table>
@@ -527,7 +529,7 @@ tr:hover td{background:#1F1F1F}
 
   <!-- Approved / Rejected History -->
   <div class="panel">
-    <div class="panel-hdr">&#128203; Approval History</div>
+    <div class="panel-hdr">Approval History</div>
     <div class="panel-body">
       <div class="tbl-wrap">
         <table>
@@ -541,10 +543,10 @@ tr:hover td{background:#1F1F1F}
 
 <!-- MANAGE ROOMS -->
 <div class="tab-content" id="tab-rooms">
-  <div class="sec-title">&#127970; Manage Rooms</div>
+  <div class="sec-title">Manage Rooms</div>
   <div style="display:grid;grid-template-columns:360px 1fr;gap:20px">
     <div class="panel">
-      <div class="panel-hdr" id="roomFormTitle">&#43; Add New Room</div>
+      <div class="panel-hdr" id="roomFormTitle">Add New Room</div>
       <div class="panel-body">
         <input type="hidden" id="r-editId"/>
         <div class="form-group"><label>Room Name *</label><input type="text" id="r-name" placeholder="e.g. Board Room"/></div>
@@ -650,7 +652,7 @@ function doAdminLogin(){
     updatePendingBadge();
     renderDashboard();
     renderBookingsTable();
-    toast('Admin mode ON — Approve/Reject buttons visible!','#0f4c75');
+    toast('Admin mode ON — Approve/Reject buttons visible!','#1F1F1F');
   } else {
     document.getElementById('adminLoginErr').style.display='block';
     document.getElementById('adminPass').value='';
@@ -663,7 +665,7 @@ function adminLogout(){
   document.getElementById('adminLogoutBtn').style.display='none';
   document.querySelectorAll('.admin-only').forEach(el=>el.style.display='none');
   switchTab('dashboard', document.querySelectorAll('.tab-btn')[0]);
-  toast('Logged out from admin','#64748b');
+  toast('Logged out from admin','#1F1F1F');
 }
 function updatePendingBadge(){
   const n=bookings.filter(b=>b.status==='Pending').length;
@@ -833,7 +835,7 @@ function renderRoomCards(bookedRoomIds, upcoming){
       <div class="room-cap">&#128101; ${r.capacity} people &bull; ${r.location||'—'}</div>
       <div class="room-facilities">${fac}</div>
       <div class="room-next">${nextInfo}</div>
-      ${!isBooked?`<button class="btn btn-green book-now-btn" onclick="event.stopPropagation();quickBook('${r.id}')">&#43; Book Now</button>`:''}
+      ${!isBooked?`<button class="btn btn-primary book-now-btn" onclick="event.stopPropagation();quickBook('${r.id}')">+ Book Now</button>`:''}
     </div>`;
   }).join('');
   document.getElementById('roomCards').innerHTML = html || '<div style="color:var(--muted);font-size:13px">No rooms added yet. Go to Manage Rooms.</div>';
@@ -856,7 +858,7 @@ function renderTimeline(){
     <div class="tl-hours">${hours.map(h=>`<div class="tl-hour">${h}</div>`).join('')}</div>
   </div>`;
 
-  const colors=['#0f4c75','#00b4d8','#7209b7','#f77f00','#06d6a0','#e63946','#1b6ca8'];
+  const colors=['#FFBA07','#22c55e','#a855f7','#f77f00','#60a5fa','#ef4444','#E5A600'];
   rooms.forEach((r,ri)=>{
     const dayB=bookings.filter(b=>b.date===d&&b.roomId===r.id&&b.status!=='Cancelled');
     const blocks=dayB.map(b=>{
@@ -881,7 +883,7 @@ function renderTodayTable(todayBookings){
     'Confirmed':'<span class="badge b-confirmed">Confirmed</span>',
     'Ongoing':  '<span class="badge b-ongoing">Ongoing</span>',
     'Cancelled':'<span class="badge b-cancelled">Cancelled</span>',
-    'Completed':'<span class="badge" style="background:#f1f5f9;color:#64748b">Completed</span>',
+    'Completed':'<span class="badge" style="background:#2A2A2A;color:#8A8A8A">Completed</span>',
     'Pending':  '<span class="badge b-upcoming">⏳ Pending</span>',
     'Rejected': '<span class="badge b-cancelled">Rejected</span>',
   };
@@ -957,12 +959,12 @@ function renderAvailRooms(){
   const avail=rooms.filter(r=>!bookings.some(b=>b.roomId===r.id&&b.date===date&&b.status!=='Cancelled'&&toMins(start)<toMins(b.end)&&toMins(end)>toMins(b.start)));
   if(!avail.length){ panel.innerHTML='<div style="color:#e63946;font-size:13px;font-weight:600;text-align:center;padding:20px">&#9888; All rooms are booked for this slot.</div>'; return; }
   panel.innerHTML=avail.map(r=>`
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #f1f5f9">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #2A2A2A">
       <div>
         <div style="font-weight:700;color:var(--primary);font-size:13px">${r.name}</div>
         <div style="font-size:11px;color:var(--muted)">&#128101; ${r.capacity} &bull; ${r.location||'—'}</div>
       </div>
-      <button class="btn btn-green btn-sm" onclick="selectRoom('${r.id}')">Select</button>
+      <button class="btn btn-primary btn-sm" onclick="selectRoom('${r.id}')">Select</button>
     </div>`).join('');
 }
 
@@ -978,7 +980,7 @@ function renderUpcoming(){
   if(!up.length){ el.innerHTML='<div style="color:var(--muted);text-align:center;padding:16px">No upcoming bookings today</div>'; return; }
   el.innerHTML=up.map(b=>{
     const room=rooms.find(r=>r.id===b.roomId);
-    return `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f1f5f9">
+    return `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #2A2A2A">
       <div>
         <div style="font-weight:700;color:var(--primary)">${room?.name||'—'}</div>
         <div style="color:var(--muted);font-size:11px">${b.purpose} &bull; ${b.organizer}</div>
@@ -1069,7 +1071,7 @@ function renderApprovals(){
       <td>${fmtTime(b.start)} – ${fmtTime(b.end)}</td>
       <td>${b.purpose}</td>
       <td>${b.organizer}</td>
-      <td style="font-size:11px;color:#0f4c75;font-weight:600">${b.email||'<span style="color:#e63946">No email</span>'}</td>
+      <td style="font-size:11px;color:#8A8A8A;font-weight:600">${b.email||'<span style="color:#ef4444">No email</span>'}</td>
       <td>${b.attendees||'-'}</td>
       <td style="font-size:11px;color:var(--muted)">${b.createdAt?new Date(b.createdAt).toLocaleString('en-IN'):'-'}</td>
       <td>
@@ -1156,7 +1158,7 @@ function confirmModify(){
     const body    = `Hi ${b.organizer},\n\nYour meeting room booking has been modified by admin.\n\nRoom    : ${room?.name}\nDate    : ${date}\nTime    : ${fmtTime(start)} – ${fmtTime(end)}\nStatus  : ${status}\n${reason?'Note    : '+reason+'\n':''}\nFor queries contact hr@cuemath.com\n\nRegards,\nAdmin Team`;
     sendEmailViaServer(email, subject, body).catch(()=>{});
   }
-  toast('✅ Booking modified successfully!','#0f4c75');
+  toast('✅ Booking modified successfully!','#1F1F1F');
   closeModifyModal();
 }
 
@@ -1299,7 +1301,7 @@ function renderBookingsTable(){
     'Confirmed':'<span class="badge b-confirmed">Confirmed</span>',
     'Ongoing':  '<span class="badge b-ongoing">Ongoing</span>',
     'Cancelled':'<span class="badge b-cancelled">Cancelled</span>',
-    'Completed':'<span class="badge" style="background:#f1f5f9;color:#64748b">Completed</span>',
+    'Completed':'<span class="badge" style="background:#2A2A2A;color:#8A8A8A">Completed</span>',
     'Pending':  '<span class="badge b-upcoming">⏳ Pending</span>',
     'Rejected': '<span class="badge b-cancelled">Rejected</span>',
   };
@@ -1352,7 +1354,7 @@ function saveRoom(){
   if(!name||!capacity){ toast('Room name and capacity required','#e63946'); return; }
   const facilities=facStr?facStr.split(',').map(s=>s.trim()).filter(Boolean):[];
   const rec={id:editId||'RM'+Date.now(), name, capacity, location, facilities, desc};
-  if(editId){ const i=rooms.findIndex(r=>r.id===editId); if(i>-1) rooms[i]=rec; toast('Room updated!','#0f4c75'); }
+  if(editId){ const i=rooms.findIndex(r=>r.id===editId); if(i>-1) rooms[i]=rec; toast('Room updated!','#1F1F1F'); }
   else{ rooms.push(rec); toast('Room added!','#06d6a0'); }
   save(); clearRoomForm(); renderRoomsTable(); populateRoomDropdowns();
 }
