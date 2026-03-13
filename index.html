@@ -226,7 +226,7 @@ input[type="time"]::-webkit-calendar-picker-indicator:hover{opacity:1}
       </div>
     </div>
 
-    <button class="btn btn-white" onclick="loadDemoData()">&#9654; Demo</button>
+
     <button class="btn btn-white" id="adminLoginBtn" onclick="openAdminLogin()">&#128272; Admin Login</button>
     <button class="btn btn-red btn-sm" id="adminLogoutBtn" style="display:none" onclick="adminLogout()">Logout</button>
   </div>
@@ -1471,8 +1471,7 @@ async function initApp(){
   } catch(e){ rooms=[]; bookings=[]; notifications=[]; }
 
   populateRoomDropdowns();
-  if(rooms.length===0) loadDemoData();
-  else renderDashboard();
+  renderDashboard();
   document.getElementById('b-date').value=today();
   updatePendingBadge();
   renderNotifBell();
