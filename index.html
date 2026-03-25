@@ -913,7 +913,7 @@ function renderTodayTable(todayBookings){
           ${st==='Pending'&&isAdmin?`<button class="btn btn-green btn-sm" onclick="approveBooking('${b.id}')">✓ Approve</button>`:''}
           ${st==='Pending'&&isAdmin?`<button class="btn btn-red btn-sm" onclick="openRejectModal('${b.id}')">✗ Reject</button>`:''}
           ${st==='Pending'&&!isAdmin?`<span style="font-size:11px;color:#f77f00;font-weight:600">Awaiting approval</span>`:''}
-          ${st!=='Pending'&&st!=='Cancelled'&&st!=='Rejected'?`<button class="btn btn-gray btn-sm" onclick="cancelBooking('${b.id}')">Cancel</button>`:''}
+          ${st!=='Pending'&&st!=='Cancelled'&&st!=='Rejected'&&isAdmin?`<button class="btn btn-gray btn-sm" onclick="cancelBooking('${b.id}')">Cancel</button>`:''}
         </div>
       </td>
     </tr>`;
@@ -1334,8 +1334,8 @@ function renderBookingsTable(){
           ${st==='Pending'&&isAdmin?`<button class="btn btn-green btn-sm" onclick="approveBooking('${b.id}')">✓ Approve</button>`:''}
           ${st==='Pending'&&isAdmin?`<button class="btn btn-red btn-sm" onclick="openRejectModal('${b.id}')">✗ Reject</button>`:''}
           ${st!=='Cancelled'&&st!=='Completed'&&st!=='Pending'?`<button class="btn btn-primary btn-sm" onclick="editBooking('${b.id}')">Edit</button>`:''}
-          ${st!=='Cancelled'&&st!=='Rejected'?`<button class="btn btn-gray btn-sm" onclick="cancelBooking('${b.id}')">Cancel</button>`:''}
-          <button class="btn btn-red btn-sm" onclick="deleteBooking('${b.id}')">Del</button>
+          ${st!=='Cancelled'&&st!=='Rejected'&&isAdmin?`<button class="btn btn-gray btn-sm" onclick="cancelBooking('${b.id}')">Cancel</button>`:''}
+          ${isAdmin?`<button class="btn btn-red btn-sm" onclick="deleteBooking('${b.id}')">Del</button>`:''}
         </div>
       </td>
     </tr>`;
