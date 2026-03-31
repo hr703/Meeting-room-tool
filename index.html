@@ -363,6 +363,7 @@ input[type="time"]::-webkit-calendar-picker-indicator:hover{opacity:1}
   <button class="tab-btn" onclick="switchTab('bookings',this)">All Bookings</button>
   <button class="tab-btn admin-only" style="display:none" onclick="switchTab('admin',this)">Approvals <span id="pendingBadge" style="background:#ef4444;color:#fff;border-radius:20px;padding:1px 7px;font-size:11px;margin-left:4px">0</span></button>
   <button class="tab-btn admin-only" style="display:none" onclick="switchTab('rooms',this)">Manage Rooms</button>
+  <button class="tab-btn admin-only" style="display:none" onclick="switchTab('reports',this);renderReports()">&#128202; Reports</button>
 </div>
 
 <!-- DASHBOARD -->
@@ -594,6 +595,54 @@ input[type="time"]::-webkit-calendar-picker-indicator:hover{opacity:1}
   </div>
 </div>
 
+<!-- REPORTS TAB -->
+<div class="tab-content" id="tab-reports">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+    <div class="sec-title" style="margin:0;border:none;padding:0">&#128202; Booking Reports</div>
+    <button class="btn btn-primary btn-sm" onclick="downloadReport()">&#8595; Download CSV</button>
+  </div>
+
+  <!-- KPI Cards -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:24px" id="report-kpis"></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px">
+    <!-- Bookings by Purpose -->
+    <div class="panel">
+      <div class="panel-hdr">&#127919; Bookings by Purpose</div>
+      <div class="panel-body">
+        <table><thead><tr><th>Purpose</th><th style="text-align:center">Count</th><th style="text-align:center">%</th></tr></thead>
+        <tbody id="report-purpose-body"></tbody></table>
+      </div>
+    </div>
+    <!-- Room Utilization -->
+    <div class="panel">
+      <div class="panel-hdr">&#127970; Room Utilization</div>
+      <div class="panel-body">
+        <table><thead><tr><th>Room</th><th style="text-align:center">Total</th><th style="text-align:center">Approved</th><th style="text-align:center">Pending</th><th style="text-align:center">Rejected</th></tr></thead>
+        <tbody id="report-room-body"></tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Monthly Bookings -->
+  <div class="panel" style="margin-bottom:20px">
+    <div class="panel-hdr">&#128197; Monthly Bookings</div>
+    <div class="panel-body">
+      <table><thead><tr><th>Month</th><th style="text-align:center">Total</th><th style="text-align:center">Approved</th><th style="text-align:center">Pending</th><th style="text-align:center">Rejected</th><th style="text-align:center">Cancelled</th></tr></thead>
+      <tbody id="report-monthly-body"></tbody></table>
+    </div>
+  </div>
+
+  <!-- Top Bookers -->
+  <div class="panel">
+    <div class="panel-hdr">&#128100; Top Bookers</div>
+    <div class="panel-body">
+      <table><thead><tr><th>Name</th><th>Email</th><th style="text-align:center">Bookings</th></tr></thead>
+      <tbody id="report-bookers-body"></tbody></table>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -784,6 +833,109 @@ function switchTab(name, btn){
   if(name==='bookings')  { populateRoomFilter(); renderBookingsTable(); }
   if(name==='admin')     renderApprovals();
   if(name==='rooms')     renderRoomsTable();
+  if(name==='reports')   renderReports();
+}
+
+// ================================================================
+// REPORTS
+// ================================================================
+function renderReports(){
+  const total     = bookings.length;
+  const approved  = bookings.filter(b=>b.status==='approved').length;
+  const pending   = bookings.filter(b=>b.status==='pending').length;
+  const rejected  = bookings.filter(b=>b.status==='rejected').length;
+  const cancelled = bookings.filter(b=>b.status==='cancelled').length;
+
+  // KPIs
+  document.getElementById('report-kpis').innerHTML = [
+    {label:'Total Bookings',  value:total,     color:'#FFBA07'},
+    {label:'Approved',        value:approved,  color:'#10b981'},
+    {label:'Pending',         value:pending,   color:'#f59e0b'},
+    {label:'Rejected',        value:rejected,  color:'#ef4444'},
+    {label:'Cancelled',       value:cancelled, color:'#8A8A8A'},
+  ].map(k=>`<div class="panel" style="padding:18px;text-align:center">
+    <div style="font-size:11px;color:#8A8A8A;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">${k.label}</div>
+    <div style="font-size:30px;font-weight:800;color:${k.color}">${k.value}</div>
+  </div>`).join('');
+
+  // By Purpose
+  const purposeMap = {};
+  bookings.forEach(b=>{ const p=b.purpose||'Other'; purposeMap[p]=(purposeMap[p]||0)+1; });
+  document.getElementById('report-purpose-body').innerHTML =
+    Object.entries(purposeMap).sort((a,b)=>b[1]-a[1]).map(([p,c])=>`<tr>
+      <td style="font-weight:600">${p}</td>
+      <td style="text-align:center">${c}</td>
+      <td style="text-align:center;color:#8A8A8A">${total?((c/total)*100).toFixed(1)+'%':'0%'}</td>
+    </tr>`).join('') || '<tr><td colspan="3" style="text-align:center;color:#8A8A8A;padding:16px">No data</td></tr>';
+
+  // Room Utilization
+  const roomMap = {};
+  bookings.forEach(b=>{
+    const r = rooms.find(x=>x.id==b.roomId);
+    const name = r?.name||'Unknown';
+    if(!roomMap[name]) roomMap[name]={total:0,approved:0,pending:0,rejected:0};
+    roomMap[name].total++;
+    if(b.status==='approved')  roomMap[name].approved++;
+    if(b.status==='pending')   roomMap[name].pending++;
+    if(b.status==='rejected')  roomMap[name].rejected++;
+  });
+  document.getElementById('report-room-body').innerHTML =
+    Object.entries(roomMap).sort((a,b)=>b[1].total-a[1].total).map(([r,v])=>`<tr>
+      <td style="font-weight:600">${r}</td>
+      <td style="text-align:center">${v.total}</td>
+      <td style="text-align:center;color:#10b981;font-weight:700">${v.approved}</td>
+      <td style="text-align:center;color:#f59e0b">${v.pending}</td>
+      <td style="text-align:center;color:#ef4444">${v.rejected}</td>
+    </tr>`).join('') || '<tr><td colspan="5" style="text-align:center;color:#8A8A8A;padding:16px">No data</td></tr>';
+
+  // Monthly
+  const monthMap = {};
+  bookings.forEach(b=>{
+    const m = (b.date||'').substring(0,7);
+    if(!m) return;
+    if(!monthMap[m]) monthMap[m]={total:0,approved:0,pending:0,rejected:0,cancelled:0};
+    monthMap[m].total++;
+    if(b.status==='approved')  monthMap[m].approved++;
+    if(b.status==='pending')   monthMap[m].pending++;
+    if(b.status==='rejected')  monthMap[m].rejected++;
+    if(b.status==='cancelled') monthMap[m].cancelled++;
+  });
+  document.getElementById('report-monthly-body').innerHTML =
+    Object.entries(monthMap).sort((a,b)=>b[0].localeCompare(a[0])).map(([m,v])=>`<tr>
+      <td style="font-weight:600">${m}</td>
+      <td style="text-align:center">${v.total}</td>
+      <td style="text-align:center;color:#10b981;font-weight:700">${v.approved}</td>
+      <td style="text-align:center;color:#f59e0b">${v.pending}</td>
+      <td style="text-align:center;color:#ef4444">${v.rejected}</td>
+      <td style="text-align:center;color:#8A8A8A">${v.cancelled}</td>
+    </tr>`).join('') || '<tr><td colspan="6" style="text-align:center;color:#8A8A8A;padding:16px">No data</td></tr>';
+
+  // Top Bookers
+  const bookerMap = {};
+  bookings.forEach(b=>{
+    const key = b.email||b.organizer||'Unknown';
+    if(!bookerMap[key]) bookerMap[key]={name:b.organizer||key,email:b.email||'-',count:0};
+    bookerMap[key].count++;
+  });
+  document.getElementById('report-bookers-body').innerHTML =
+    Object.values(bookerMap).sort((a,b)=>b.count-a.count).slice(0,10).map(v=>`<tr>
+      <td style="font-weight:600">${v.name}</td>
+      <td style="color:#8A8A8A">${v.email}</td>
+      <td style="text-align:center;font-weight:700;color:#FFBA07">${v.count}</td>
+    </tr>`).join('') || '<tr><td colspan="3" style="text-align:center;color:#8A8A8A;padding:16px">No data</td></tr>';
+}
+
+function downloadReport(){
+  const headers = ['Booking ID','Room','Date','Start','End','Purpose','Organizer','Email','Attendees','Status'];
+  const rows = bookings.map(b=>{
+    const r = rooms.find(x=>x.id==b.roomId);
+    return [b.id, r?.name||'-', b.date||'-', b.start||'-', b.end||'-', b.purpose||'-', b.organizer||'-', b.email||'-', b.attendees||'-', b.status||'-'];
+  });
+  const csv = [headers, ...rows].map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+  a.download = 'meeting-room-report-' + today() + '.csv';
+  a.click();
 }
 
 // ================================================================
