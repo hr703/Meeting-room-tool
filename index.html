@@ -364,6 +364,7 @@ input[type="time"]::-webkit-calendar-picker-indicator:hover{opacity:1}
   <button class="tab-btn admin-only" style="display:none" onclick="switchTab('admin',this)">Approvals <span id="pendingBadge" style="background:#ef4444;color:#fff;border-radius:20px;padding:1px 7px;font-size:11px;margin-left:4px">0</span></button>
   <button class="tab-btn admin-only" style="display:none" onclick="switchTab('rooms',this)">Manage Rooms</button>
   <button class="tab-btn admin-only" style="display:none" onclick="switchTab('reports',this);renderReports()">&#128202; Reports</button>
+  <button class="tab-btn admin-only" style="display:none" onclick="switchTab('weekly',this);renderWeeklyAnalysis()">&#128197; Weekly Analysis</button>
 </div>
 
 <!-- DASHBOARD -->
@@ -591,6 +592,55 @@ input[type="time"]::-webkit-calendar-picker-indicator:hover{opacity:1}
           </table>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- WEEKLY ANALYSIS TAB -->
+<div class="tab-content" id="tab-weekly">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px">
+    <div class="sec-title" style="margin:0;border:none;padding:0">&#128197; Weekly Room Analysis</div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <button class="btn btn-gray btn-sm" onclick="shiftWeek(-1)">&#8592; Prev Week</button>
+      <span id="weekLabel" style="font-size:14px;font-weight:700;color:#FFBA07;min-width:200px;text-align:center"></span>
+      <button class="btn btn-gray btn-sm" onclick="shiftWeek(1)">Next Week &#8594;</button>
+    </div>
+  </div>
+
+  <!-- Week KPIs -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:24px" id="week-kpis"></div>
+
+  <!-- Day-wise Bookings -->
+  <div class="panel" style="margin-bottom:20px">
+    <div class="panel-hdr">&#128197; Day-wise Booking Count</div>
+    <div class="panel-body" id="week-daywise"></div>
+  </div>
+
+  <!-- Room-wise this week -->
+  <div class="panel" style="margin-bottom:20px">
+    <div class="panel-hdr">&#127970; Room-wise Utilization This Week</div>
+    <div class="panel-body">
+      <table>
+        <thead><tr><th>Room</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th><th style="text-align:center">Total</th></tr></thead>
+        <tbody id="week-room-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Peak Hours -->
+  <div class="panel" style="margin-bottom:20px">
+    <div class="panel-hdr">&#9201; Peak Hours This Week</div>
+    <div class="panel-body" id="week-peak"></div>
+  </div>
+
+  <!-- Bookings list this week -->
+  <div class="panel">
+    <div class="panel-hdr">&#128203; All Bookings This Week</div>
+    <div class="panel-body">
+      <table>
+        <thead><tr><th>Date</th><th>Room</th><th>Time</th><th>Purpose</th><th>Organizer</th><th>Status</th></tr></thead>
+        <tbody id="week-bookings-body"></tbody>
+      </table>
     </div>
   </div>
 </div>
@@ -834,6 +884,7 @@ function switchTab(name, btn){
   if(name==='admin')     renderApprovals();
   if(name==='rooms')     renderRoomsTable();
   if(name==='reports')   renderReports();
+  if(name==='weekly')    renderWeeklyAnalysis();
 }
 
 // ================================================================
@@ -936,6 +987,124 @@ function downloadReport(){
   a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
   a.download = 'meeting-room-report-' + today() + '.csv';
   a.click();
+}
+
+// ================================================================
+// WEEKLY ANALYSIS
+// ================================================================
+let weekOffset = 0;
+
+function getWeekRange(offset) {
+  const now = new Date();
+  const day = now.getDay(); // 0=Sun
+  const mon = new Date(now);
+  mon.setDate(now.getDate() - (day === 0 ? 6 : day - 1) + offset * 7);
+  mon.setHours(0,0,0,0);
+  const sun = new Date(mon);
+  sun.setDate(mon.getDate() + 6);
+  return { mon, sun };
+}
+
+function fmtDate(d){ return d.toISOString().slice(0,10); }
+function fmtDayLabel(d){ return d.toLocaleDateString('en-IN',{weekday:'short',day:'2-digit',month:'short'}); }
+
+function shiftWeek(dir){ weekOffset += dir; renderWeeklyAnalysis(); }
+
+function renderWeeklyAnalysis(){
+  const { mon, sun } = getWeekRange(weekOffset);
+  const days = Array.from({length:7}, (_,i)=>{ const d=new Date(mon); d.setDate(mon.getDate()+i); return d; });
+  const dayStrs = days.map(fmtDate);
+
+  document.getElementById('weekLabel').textContent =
+    `${fmtDayLabel(mon)}  →  ${fmtDayLabel(sun)}`;
+
+  const weekBookings = bookings.filter(b=> b.date >= dayStrs[0] && b.date <= dayStrs[6]);
+
+  // KPIs
+  const approved  = weekBookings.filter(b=>b.status==='approved').length;
+  const pending   = weekBookings.filter(b=>b.status==='pending').length;
+  const rejected  = weekBookings.filter(b=>b.status==='rejected').length;
+  const cancelled = weekBookings.filter(b=>b.status==='cancelled').length;
+  document.getElementById('week-kpis').innerHTML = [
+    {label:'Total This Week', value:weekBookings.length, color:'#FFBA07'},
+    {label:'Approved',        value:approved,            color:'#10b981'},
+    {label:'Pending',         value:pending,             color:'#f59e0b'},
+    {label:'Rejected',        value:rejected,            color:'#ef4444'},
+    {label:'Cancelled',       value:cancelled,           color:'#8A8A8A'},
+  ].map(k=>`<div class="panel" style="padding:16px;text-align:center">
+    <div style="font-size:11px;color:#8A8A8A;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">${k.label}</div>
+    <div style="font-size:28px;font-weight:800;color:${k.color}">${k.value}</div>
+  </div>`).join('');
+
+  // Day-wise bar chart
+  const dayNames = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const dayCounts = dayStrs.map(d=> weekBookings.filter(b=>b.date===d).length);
+  const maxDay = Math.max(...dayCounts, 1);
+  document.getElementById('week-daywise').innerHTML = `
+    <div style="display:flex;gap:8px;align-items:flex-end;height:120px;padding:8px 0">
+      ${dayNames.map((name,i)=>{
+        const pct = Math.round((dayCounts[i]/maxDay)*100);
+        const isToday = dayStrs[i] === today();
+        return `<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px">
+          <div style="font-size:12px;font-weight:700;color:#FFBA07">${dayCounts[i]||''}</div>
+          <div style="width:100%;background:${isToday?'#FFBA07':'#2a5298'};border-radius:4px 4px 0 0;height:${Math.max(pct,4)}%;min-height:4px;transition:height .3s"></div>
+          <div style="font-size:11px;color:${isToday?'#FFBA07':'#8A8A8A'};font-weight:${isToday?'700':'400'}">${name}</div>
+          <div style="font-size:10px;color:#555">${dayStrs[i].slice(5)}</div>
+        </div>`;
+      }).join('')}
+    </div>`;
+
+  // Room-wise table
+  const roomRows = rooms.map(r=>{
+    const cells = dayStrs.map(d=>{
+      const cnt = weekBookings.filter(b=>b.roomId==r.id && b.date===d).length;
+      return `<td style="text-align:center;color:${cnt>0?'#FFBA07':'#555'};font-weight:${cnt>0?'700':'400'}">${cnt||'-'}</td>`;
+    });
+    const total = weekBookings.filter(b=>b.roomId==r.id).length;
+    return `<tr><td style="font-weight:700">${r.name}</td>${cells.join('')}<td style="text-align:center;font-weight:800;color:#FFBA07">${total}</td></tr>`;
+  });
+  document.getElementById('week-room-body').innerHTML = roomRows.join('') ||
+    '<tr><td colspan="9" style="text-align:center;color:#8A8A8A;padding:16px">No rooms configured</td></tr>';
+
+  // Peak Hours
+  const hourMap = {};
+  weekBookings.forEach(b=>{
+    if(!b.start) return;
+    const h = b.start.split(':')[0];
+    hourMap[h] = (hourMap[h]||0) + 1;
+  });
+  const maxHour = Math.max(...Object.values(hourMap), 1);
+  const hourEntries = Object.entries(hourMap).sort((a,b)=>a[0]-b[0]);
+  document.getElementById('week-peak').innerHTML = hourEntries.length ? `
+    <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;min-height:80px;padding:8px 0">
+      ${hourEntries.map(([h,c])=>`
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;min-width:48px">
+          <div style="font-size:12px;font-weight:700;color:#FFBA07">${c}</div>
+          <div style="width:40px;background:#2a5298;border-radius:4px 4px 0 0;height:${Math.round((c/maxHour)*60)+10}px"></div>
+          <div style="font-size:11px;color:#8A8A8A">${h}:00</div>
+        </div>`).join('')}
+    </div>
+    <div style="font-size:12px;color:#8A8A8A;margin-top:8px">Peak hour: <strong style="color:#FFBA07">${hourEntries.sort((a,b)=>b[1]-a[1])[0]?.[0]}:00</strong></div>
+  ` : '<div style="color:#8A8A8A;padding:16px">No bookings this week</div>';
+
+  // Bookings list
+  const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  document.getElementById('week-bookings-body').innerHTML = weekBookings.length ?
+    [...weekBookings].sort((a,b)=>a.date>b.date?1:-1).map(b=>{
+      const r = rooms.find(x=>x.id==b.roomId);
+      const d = new Date(b.date+'T00:00:00');
+      const dayName = DAYS[d.getDay()];
+      const statusColor = b.status==='approved'?'#10b981':b.status==='pending'?'#f59e0b':b.status==='rejected'?'#ef4444':'#8A8A8A';
+      return `<tr>
+        <td style="font-weight:600">${dayName}, ${b.date}</td>
+        <td>${r?.name||'-'}</td>
+        <td>${b.start||'-'} – ${b.end||'-'}</td>
+        <td>${b.purpose||'-'}</td>
+        <td>${b.organizer||'-'}</td>
+        <td><span style="background:${statusColor}22;color:${statusColor};padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700">${b.status}</span></td>
+      </tr>`;
+    }).join('') :
+    '<tr><td colspan="6" style="text-align:center;color:#8A8A8A;padding:16px">No bookings this week</td></tr>';
 }
 
 // ================================================================
