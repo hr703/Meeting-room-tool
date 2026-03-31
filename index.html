@@ -1058,7 +1058,9 @@ function saveBooking(){
 }
 
 function clearBookingForm(){
-  ['b-editId','b-room','b-purpose','b-organizer','b-email','b-notes'].forEach(id=>document.getElementById(id).value='');
+  ['b-editId','b-room','b-purpose','b-notes'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('b-organizer').value = currentUser.name || '';
+  document.getElementById('b-email').value     = currentUser.email || '';
   document.getElementById('b-date').value=today();
   document.getElementById('b-start').value='';
   document.getElementById('b-end').value='';
@@ -1477,14 +1479,22 @@ setInterval(async()=>{
 const GOOGLE_CLIENT_ID  = '359149360904-1j4v8bu4on34thl2p6d2t128nq5pilvn.apps.googleusercontent.com';
 const ALLOWED_DOMAIN    = 'cuemath.com';
 
+let currentUser = { name: '', email: '' };
+
 function handleGoogleLogin(response){
   const payload = JSON.parse(atob(response.credential.split('.')[1]));
   const email   = (payload.email || '').toLowerCase();
   const err     = document.getElementById('gLoginErr');
   if(email.endsWith('@' + ALLOWED_DOMAIN)){
+    currentUser = { name: payload.name || '', email };
     document.getElementById('googleLoginScreen').style.display = 'none';
     err.style.display = 'none';
     initApp();
+    // Auto-fill booking form
+    const nameEl  = document.getElementById('b-organizer');
+    const emailEl = document.getElementById('b-email');
+    if(nameEl)  nameEl.value  = currentUser.name;
+    if(emailEl) emailEl.value = currentUser.email;
   } else {
     err.style.display = 'block';
   }
