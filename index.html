@@ -687,7 +687,7 @@ input[type="time"]::-webkit-calendar-picker-indicator:hover{opacity:1}
   <div class="panel">
     <div class="panel-hdr">&#128100; Top Bookers</div>
     <div class="panel-body">
-      <table><thead><tr><th>Name</th><th>Email</th><th style="text-align:center">Bookings</th></tr></thead>
+      <table><thead><tr><th>Name</th><th>Email</th><th style="text-align:center">Bookings</th><th style="text-align:center">Total Hours</th></tr></thead>
       <tbody id="report-bookers-body"></tbody></table>
     </div>
   </div>
@@ -961,19 +961,27 @@ function renderReports(){
       <td style="text-align:center;color:#8A8A8A">${v.cancelled}</td>
     </tr>`).join('') || '<tr><td colspan="6" style="text-align:center;color:#8A8A8A;padding:16px">No data</td></tr>';
 
-  // Top Bookers
+  // Top Bookers — group by email (lowercase), fallback to organizer name lowercase
   const bookerMap = {};
   bookings.forEach(b=>{
-    const key = b.email||b.organizer||'Unknown';
-    if(!bookerMap[key]) bookerMap[key]={name:b.organizer||key,email:b.email||'-',count:0};
+    const key = (b.email||b.organizer||'unknown').toLowerCase().trim();
+    if(!bookerMap[key]) bookerMap[key]={name:b.organizer||key,email:b.email||'-',count:0,hours:0};
     bookerMap[key].count++;
+    // Calculate hours
+    if(b.start && b.end){
+      const [sh,sm] = b.start.split(':').map(Number);
+      const [eh,em] = b.end.split(':').map(Number);
+      const mins = (eh*60+em) - (sh*60+sm);
+      if(mins > 0) bookerMap[key].hours += mins/60;
+    }
   });
   document.getElementById('report-bookers-body').innerHTML =
     Object.values(bookerMap).sort((a,b)=>b.count-a.count).slice(0,10).map(v=>`<tr>
       <td style="font-weight:600">${v.name}</td>
       <td style="color:#8A8A8A">${v.email}</td>
       <td style="text-align:center;font-weight:700;color:#FFBA07">${v.count}</td>
-    </tr>`).join('') || '<tr><td colspan="3" style="text-align:center;color:#8A8A8A;padding:16px">No data</td></tr>';
+      <td style="text-align:center;font-weight:700;color:#10b981">${v.hours.toFixed(1)} hrs</td>
+    </tr>`).join('') || '<tr><td colspan="4" style="text-align:center;color:#8A8A8A;padding:16px">No data</td></tr>';
 }
 
 function downloadReport(){
