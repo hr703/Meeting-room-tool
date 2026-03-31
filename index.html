@@ -1457,6 +1457,8 @@ async function initApp(){
   populateRoomDropdowns();
   renderDashboard();
   document.getElementById('b-date').value=today();
+  document.getElementById('b-organizer').value = currentUser.name || '';
+  document.getElementById('b-email').value     = currentUser.email || '';
   updatePendingBadge();
   renderNotifBell();
 }
