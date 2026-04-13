@@ -12,23 +12,31 @@ EMAIL_FROM    = 'hr@cuemath.com'
 # ─────────────────────────────────────────────────────────────────
 
 # ── STORAGE (PostgreSQL on cloud, JSON file locally) ─────────────
+_db_ok = False
 if DATABASE_URL:
-    import psycopg2
+    try:
+        import psycopg2
 
-    def _conn():
-        return psycopg2.connect(DATABASE_URL, sslmode='require')
+        def _conn():
+            return psycopg2.connect(DATABASE_URL, sslmode='require')
 
-    def _init():
-        with _conn() as c:
-            with c.cursor() as cur:
-                cur.execute('''CREATE TABLE IF NOT EXISTS meeting_appdata
-                               (id INT PRIMARY KEY, data TEXT NOT NULL)''')
-                cur.execute('''INSERT INTO meeting_appdata (id, data)
-                               VALUES (1, %s) ON CONFLICT (id) DO NOTHING''',
-                            [json.dumps({'rooms':[],'bookings':[],'notifications':[]})])
-                c.commit()
-    _init()
+        def _init():
+            with _conn() as c:
+                with c.cursor() as cur:
+                    cur.execute('''CREATE TABLE IF NOT EXISTS meeting_appdata
+                                   (id INT PRIMARY KEY, data TEXT NOT NULL)''')
+                    cur.execute('''INSERT INTO meeting_appdata (id, data)
+                                   VALUES (1, %s) ON CONFLICT (id) DO NOTHING''',
+                                [json.dumps({'rooms':[],'bookings':[],'notifications':[]})])
+                    c.commit()
+        _init()
+        _db_ok = True
+        print('[DB] PostgreSQL connected successfully')
+    except Exception as e:
+        print(f'[DB] Connection failed, falling back to file storage: {e}')
+        _db_ok = False
 
+if _db_ok:
     def load_data():
         try:
             with _conn() as c:
@@ -49,7 +57,7 @@ if DATABASE_URL:
         except Exception as e:
             print(f'[DB WRITE ERROR] {e}')
 
-else:
+if not _db_ok:
     def load_data():
         if os.path.exists(DATA_FILE):
             with open(DATA_FILE, 'r') as f:
