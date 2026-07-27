@@ -716,11 +716,21 @@ let lastSaveTime = 0;
 
 async function save(){
   lastSaveTime = Date.now();
-  await fetch('/api/data', {
-    method: 'POST',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({rooms, bookings, notifications})
-  }).catch(()=>{});
+  try{
+    const res = await fetch('/api/data', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({rooms, bookings, notifications})
+    });
+    if(res.status === 409){
+      const err = await res.json().catch(()=>({error:'Booking conflict — this slot was just taken.'}));
+      toast(err.error || 'Booking conflict — this slot was just taken.', '#e63946');
+      const fresh = await fetch('/api/data').then(r=>r.json()).catch(()=>null);
+      if(fresh){ rooms=fresh.rooms||[]; bookings=fresh.bookings||[]; notifications=fresh.notifications||[]; }
+      return false;
+    }
+    return true;
+  }catch(e){ return false; }
 }
 
 

@@ -69,6 +69,54 @@ if not _db_ok:
             json.dump(data, f, indent=2)
 # ─────────────────────────────────────────────────────────────────
 
+def _time_to_mins(t):
+    try:
+        h, m = t.split(':')
+        return int(h) * 60 + int(m)
+    except Exception:
+        return None
+
+BLOCKING_STATUSES = ('Pending', 'Approved')
+
+def find_new_conflict(old_bookings, new_bookings):
+    """Return a conflict message if any new/edited booking newly overlaps
+    another active (Pending/Approved) booking for the same room+date.
+    Pre-existing conflicts already in old_bookings are left untouched."""
+    old_by_id = {b.get('id'): b for b in old_bookings}
+    new_by_id = {b.get('id'): b for b in new_bookings}
+
+    def touched(b):
+        old = old_by_id.get(b.get('id'))
+        if old is None:
+            return True
+        return (old.get('roomId') != b.get('roomId') or old.get('date') != b.get('date') or
+                old.get('start') != b.get('start') or old.get('end') != b.get('end') or
+                old.get('status') != b.get('status'))
+
+    for b in new_bookings:
+        if b.get('status') not in BLOCKING_STATUSES:
+            continue
+        if not touched(b):
+            continue
+        bs, be = _time_to_mins(b.get('start', '')), _time_to_mins(b.get('end', ''))
+        if bs is None or be is None:
+            continue
+        for other in new_bookings:
+            if other.get('id') == b.get('id'):
+                continue
+            if other.get('status') not in BLOCKING_STATUSES:
+                continue
+            if other.get('roomId') != b.get('roomId') or other.get('date') != b.get('date'):
+                continue
+            os_, oe = _time_to_mins(other.get('start', '')), _time_to_mins(other.get('end', ''))
+            if os_ is None or oe is None:
+                continue
+            if bs < oe and be > os_:
+                return (f"Booking conflict: room already has an active booking "
+                        f"({other.get('organizer','')} — {other.get('start')}-{other.get('end')} "
+                        f"on {other.get('date')}) for this room/date/time.")
+    return None
+
 def send_email_async(to_email, subject, body):
     try:
         payload = json.dumps({
@@ -125,7 +173,16 @@ class Handler(BaseHTTPRequestHandler):
         body_bytes = self.rfile.read(length)
 
         if path == '/api/data':
-            save_data(json.loads(body_bytes))
+            incoming = json.loads(body_bytes)
+            current  = load_data()
+            conflict = find_new_conflict(current.get('bookings', []), incoming.get('bookings', []))
+            if conflict:
+                self.send_response(409)
+                self.send_header('Content-Type', 'application/json')
+                self.send_cors(); self.end_headers()
+                self.wfile.write(json.dumps({'ok': False, 'error': conflict}).encode())
+                return
+            save_data(incoming)
             self.send_response(200)
             self.send_header('Content-Type', 'application/json')
             self.send_cors(); self.end_headers()
